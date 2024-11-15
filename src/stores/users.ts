@@ -1,10 +1,8 @@
 import { defineStore } from "pinia";
-import { loginRequest, registerRequest } from "../api/userApi";
-import IUserState from "../interfaces/IUserState";
-import IUser from "../interfaces/IUser";
-import ICredentials from "../interfaces/ICredentials";
+import { loginRequest, registerRequest } from "../api/users";
+
+import { IUser, IUserState, IUserResponse, IUserCredentials} from "../interfaces/user";
 import { AxiosRequestConfig, AxiosResponse } from "axios";
-import IUserResponse from "../interfaces/IResponse";
 
 export const useUsersStore = defineStore("user", {
   state: (): IUserState => ({
@@ -19,7 +17,7 @@ export const useUsersStore = defineStore("user", {
       return response
     },
 
-    async login(payload: AxiosRequestConfig<ICredentials>) {
+    async login(payload: AxiosRequestConfig<IUserCredentials>) {
       const response:AxiosResponse<IUserResponse> = await loginRequest(payload);
       this.currentUser = response.data.user;
       this.isAuthenticated = true;

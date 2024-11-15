@@ -1,29 +1,41 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { useUsersStore } from "../stores/usersStore";
-import axios, { AxiosRequestConfig } from "axios";
-import IUser from "../interfaces/IUser";
+import { AxiosError, AxiosRequestConfig } from "axios";
+import { useUsersStore } from "@/stores/users";
+import { IUser } from "@/interfaces/user";
+import { credentialsValidator } from "@/lib/validators";
+import { errorHandler } from "#src/lib/errors/errorHandler.js";
 
 const usersStore = useUsersStore();
-const params = ref<IUser>({ name: "", email: "", password: "", id: null});
+const params = ref<IUser>({ name: "", email: "", password: "", id: null });
 const errorMessage = ref<string | null>(null);
 const userMessage = ref<string | null>("Enter your credentials, please");
 
 const onSubmit = async () => {
   userMessage.value = null;
+
   const config: AxiosRequestConfig<IUser> = {
     data: params.value,
   };
+
+  const name = params.value.name.trim();
+  const email = params.value.email.trim();
+  const password = params.value.password;
+
+  if (credentialsValidator(name, email,  password)) {
+    errorMessage.value = credentialsValidator(name, email, password);
+
+    return
+  }
+
   try {
     const response = await usersStore.register(config);
+
     userMessage.value = `${response.data.message}, welcome ${response.data.user.name}!`;
     errorMessage.value = null;
-  } catch (error) {
-    if (axios.isAxiosError(error) && error.response) {
-      errorMessage.value = `error: ${
-        error.response.data.message || "something is wrong"
-      }`;
-    }
+
+  } catch (error: unknown) {
+    errorMessage.value = errorHandler(error);
   }
 };
 </script>
@@ -34,7 +46,7 @@ const onSubmit = async () => {
       <label>REGISTER FORM</label>
       <input type="text" v-model="params.name" placeholder="Name" />
       <input type="text" v-model="params.email" placeholder="Email" />
-      <input type="text" v-model="params.password" placeholder="password" />
+      <input type="text" v-model="params.password" placeholder="Password" />
     </div>
     <div v-if="errorMessage" class="user-message error">{{ errorMessage }}</div>
     <div v-else class="user-message">{{ userMessage }}</div>
