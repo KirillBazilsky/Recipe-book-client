@@ -5,6 +5,8 @@ import { useUsersStore } from "@/stores/users";
 import { IUser } from "@/interfaces/user";
 import { credentialsValidator } from "@/lib/validators";
 import { errorHandler } from "#src/lib/errors/errorHandler.js";
+import PasswordInput from "./ui/PasswordInput.vue";
+import TextInput from "./ui/TextInput.vue";
 
 const usersStore = useUsersStore();
 const params = ref<IUser>({ name: "", email: "", password: "", id: null });
@@ -44,9 +46,9 @@ const onSubmit = async () => {
   <form @submit.prevent="onSubmit">
     <div class="input-wrapper">
       <label>REGISTER FORM</label>
-      <input type="text" v-model="params.name" placeholder="Name" />
-      <input type="text" v-model="params.email" placeholder="Email" />
-      <input type="text" v-model="params.password" placeholder="Password" />
+      <TextInput type="text" v-model="params.name" placeholder="Name" />
+      <TextInput type="email" v-model="params.email" placeholder="Email" />
+      <PasswordInput v-model="params.password" />
     </div>
     <div v-if="errorMessage" class="user-message error">{{ errorMessage }}</div>
     <div v-else class="user-message">{{ userMessage }}</div>
@@ -54,4 +56,3 @@ const onSubmit = async () => {
   </form>
 </template>
 
-<style scoped></style>
