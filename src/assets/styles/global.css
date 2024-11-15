@@ -1,11 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Outfit:wght@100..900&display=swap');
 
 :root {
     --main-bg-color: #f9f9f9;
     --main-color: #1c3d5a;
     --primary-color: #ff6f61; 
     --secondary-color: #228765; 
-    --error-bg-color: #ff4d4d; 
+    --error-bg-color: #ff4d4d;
+    --neutral-gray: #d3c7c7d3;
+    --secondary-bg: #D6D9B0;
     --transition-speed: 0.3s; 
     --padding-size: 16px;
 }
@@ -14,7 +16,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Nunito Sans', sans-serif;
+    font-family: 'Outfit', sans-serif;
     font-weight: 400; 
     color: var(--main-color);
     background-color: var(--main-bg-color);
@@ -22,21 +24,28 @@
 
 body {
     background-color: var(--main-bg-color);
-    padding: var(--padding-size);
+}
+
+.disabled {
+  opacity: 0.5;  
+  pointer-events: none;
 }
 
 button {
-    width: 180px;
-    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap:4px;
+    width: 140px;
+    height: 30px;
     background-color: var(--main-color);
     border: none;
-    border-radius: 30px;
     color: var(--main-bg-color);
     font-size: 16px;
     cursor: pointer;
     transition: background-color var(--transition-speed), transform var(--transition-speed);
-    display: inline-block;
     text-align: center;
+    box-shadow: 0px 0px 10px var(--neutral-gray);
 }
 
 button:hover {
@@ -49,13 +58,16 @@ button:active {
 }
 
 .user-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
     background-color: var(--secondary-color);
     color: var(--main-bg-color);
     border-radius: 8px;
-    padding: 20px;
+    padding: 12px;
     font-size: 14px;
     text-align: center;
-    width: 300px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     opacity: 0;
     animation: fadeIn 0.5s forwards;
@@ -80,8 +92,6 @@ form {
     width: 100%;
     max-width: 400px;
     height: auto;
-    min-height: 375px;
-    height: auto;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -101,6 +111,7 @@ form:hover {
 form input {
     width: 100%;
     padding: 12px;
+    padding-right: 28px;
     border: 1px solid #d1d1d1;
     border-radius: 8px;
     background-color: #f9f9f9;
@@ -133,6 +144,7 @@ h1{
     gap: var(--padding-size);
     background-color: #ffffff;
     width:100%;
+    position: relative;
 }
 
 .form-wrapper{
@@ -140,3 +152,13 @@ h1{
     height: auto;
     position: relative;
   }
+
+  .modal-blur{
+    width:100%;
+    height:100%;
+    position: absolute;
+    z-index: 9;
+    background-color: var(--neutral-gray);
+    backdrop-filter: blur(2px);
+  }
+

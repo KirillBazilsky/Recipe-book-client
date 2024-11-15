@@ -1,8 +1,7 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia';
 import router from './router/index';
-import "../assets/styles/global.css";
-import '@mdi/font/css/materialdesignicons.min.css';
+import "./assets/styles/global.css";
 import App from './App.vue'
 
 const app = createApp(App);

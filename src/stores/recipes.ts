@@ -5,10 +5,8 @@ import {
   deleteRecipeRequest,
   getRecipesRequest,
   updateRecipeRequest,
-} from "../api/RecipesApi";
-import IRecipesFiltersParams from "../interfaces/IRecipesFiltersParams";
-import IRecipesState from "../interfaces/IRecipesState";
-import IRecipe from "../interfaces/IRecipe";
+} from "../api/recipes";
+import { IRecipe, IRecipesState, IRecipesFiltersParams } from "../interfaces/recipe";
 
 export const useRecipeStore = defineStore("recipes", {
   state: (): IRecipesState => ({
