@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import LoginForm from "../components/LoginForm.vue";
-import RegistrationForm from "../components/RegistrationForm.vue";
+import LoginForm from "@/components/LoginForm.vue";
+import RegistrationForm from "@/components/RegistrationForm.vue";
 
 const isLoginFormOpen = ref(true);
 const isRegisterFormOpen = ref(false);
@@ -38,7 +38,7 @@ const registerSwitcher = () => {
   align-items: center;
   justify-content: center;
   gap: 16px;
-  padding: 16px;
+  margin: 16px 0;
 }
 
 .active{

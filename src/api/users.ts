@@ -1,22 +1,21 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
-import ICredentials from "../interfaces/ICredentials";
-import IUser from "../interfaces/IUser";
-import { API_URL } from "../constants";
-import IUserResponse from "../interfaces/IResponse";
+import { IUser, IUserResponse, IUserCredentials } from "@/interfaces/user";
+import { BASE_URL } from "@/constants";
 
 export const registerRequest = async (params: AxiosRequestConfig<IUser>) => {
   const response: AxiosResponse<IUserResponse> = await axios.post(
-    `${API_URL}auth/register`,
+    `${BASE_URL}/auth/register`,
     params
   );
 
   return response;
 };
 
-export const loginRequest = async (params: AxiosRequestConfig<ICredentials>) => {
+export const loginRequest = async (params: AxiosRequestConfig<IUserCredentials>) => {
   const response: AxiosResponse<IUserResponse> = await axios.post(
-    `${API_URL}auth/login`,
+    `${BASE_URL}/auth/login`,
     params
   );
+
   return response;
 };

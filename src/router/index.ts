@@ -1,10 +1,9 @@
-// src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router';
-import LoginRegister from '../pages/LoginRegister.vue';
+import LoginRegister from '../pages/AuthenticationPage.vue';
 import RecipesPage from '../pages/RecipesPage.vue';
-import RecipeDetails from '../pages/RecipeDetails.vue';
-import RecipeUpdate from '../pages/RecipeUpdate.vue';
-import UserUpdate from '../pages/UserUpdate.vue';
+import RecipeDetails from '../pages/RecipeDetailsPage.vue';
+import RecipeUpdate from '../pages/RecipeUpdatePage.vue';
+import UserUpdate from '../pages/UserUpdatePage.vue';
 
 const routes = [
   {
@@ -13,8 +12,8 @@ const routes = [
     component: RecipesPage,
   },
   {
-    path: '/login',
-    name: 'Login',
+    path: '/authentication',
+    name: 'Authentication',
     component: LoginRegister,
   },
   {
