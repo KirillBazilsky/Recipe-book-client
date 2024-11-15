@@ -5,7 +5,8 @@
     --main-color: #1c3d5a;
     --primary-color: #ff6f61; 
     --secondary-color: #228765; 
-    --error-bg-color: #ff4d4d; 
+    --error-bg-color: #ff4d4d;
+    --neutral-gray: #d3c7c7d3;
     --transition-speed: 0.3s; 
     --padding-size: 16px;
 }
@@ -99,6 +100,7 @@ form:hover {
 form input {
     width: 100%;
     padding: 12px;
+    padding-right: 28px;
     border: 1px solid #d1d1d1;
     border-radius: 8px;
     background-color: #f9f9f9;
@@ -131,6 +133,7 @@ h1{
     gap: var(--padding-size);
     background-color: #ffffff;
     width:100%;
+    position: relative;
 }
 
 .form-wrapper{

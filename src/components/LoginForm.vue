@@ -6,6 +6,8 @@ import { IUserCredentials } from "@/interfaces/user";
 import { errorHandler } from "#src/lib/errors/errorHandler.js";
 import { credentialsValidator } from "#src/lib/validators.js";
 import { NAME } from "#src/constants.js";
+import PasswordInput from "./ui/PasswordInput.vue";
+import TextInput from "./ui/TextInput.vue";
 
 const usersStore = useUsersStore();
 const params = ref<IUserCredentials>({ email: "", password: "" });
@@ -43,8 +45,8 @@ const onSubmit = async () => {
   <form @submit.prevent="onSubmit">
     <div class="input-wrapper">
       <label>LOGIN FORM</label>
-      <Input type="text" v-model="params.email" placeholder="Email" />
-      <input type="text" v-model="params.password" placeholder="Password" />
+      <TextInput type="email" v-model="params.email" placeholder="Email" />
+      <PasswordInput v-model="params.password" />
     </div>
     <div v-if="errorMessage" class="user-message error">{{ errorMessage }}</div>
     <div v-else class="user-message">{{ userMessage }}</div>
