@@ -1,16 +1,21 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { useUsersStore } from '#src/stores/users.js';
+import { computed, ref, watch } from 'vue';
 
 interface IProps {
     modelValue: string
 }
 const props = defineProps<IProps>()
 const emit = defineEmits(['update:modelValue']);
+const usersStore = useUsersStore();
+const isAuthenticated = computed(() => usersStore.isUserAuthenticated);
 
 const inputType = ref<string>("password")
     const togglePasswordHide = () => {
   inputType.value = inputType.value === "password" ? "text" : "password";
 };
+
+watch(() => inputType.value, () => setTimeout(() => inputType.value = "password", 1500 ));
 
 const handleInput = (event: Event) => {
   const target = event.target as HTMLInputElement;
@@ -28,11 +33,13 @@ const handleInput = (event: Event) => {
             :value="props.modelValue"
             placeholder="Password"
             @input = "handleInput"
+            :disabled = "isAuthenticated"
+            :class="{'disabled': isAuthenticated}"
         ></input>
         <button 
             @click.prevent="togglePasswordHide"
             type="button"
-            :class="{ 'openPassword': inputType !=='text' }"
+            :class="{ 'openPassword': inputType !=='text', 'disabled': isAuthenticated}"
         ></button>
     </div>
 </template>
@@ -41,13 +48,14 @@ const handleInput = (event: Event) => {
 button {
     width: 20px;
     height: 20px;
-    background-image: url('/assets/icons/close-eye.svg');
+    background-image: url('src/assets/icons/close-eye.svg');
     background-color: var(--main-bg-color);
     background-size: cover; 
     background-position: center;
     position: absolute;
     top: 30%;
     right: 8px;
+    box-shadow: none;
 }
 
 button:hover {
@@ -55,6 +63,6 @@ button:hover {
 }
 
 button.openPassword {
-    background-image: url('/assets/icons/eye.svg');
+    background-image: url('src/assets/icons/eye.svg');
 }
 </style>

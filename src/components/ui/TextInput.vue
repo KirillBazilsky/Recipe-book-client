@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import { useUsersStore } from "#src/stores/users.js";
 import { filterSuggestions } from "@/lib/filterSuggestions.js";
 import { getSuggestions } from "@/lib/getSuggestions.js";
 import { pushValueToSuggestions } from "@/lib/pushValueToSuggestions.js";
 import { setLocalStorageItem } from "@/lib/setLocalStorageItem.js";
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 
 interface IProps {
   modelValue: string;
@@ -14,6 +15,8 @@ interface IProps {
 const props = defineProps<IProps>();
 const emit = defineEmits(["update:modelValue"]);
 
+const usersStore = useUsersStore();
+const isAuthenticated = computed(() => usersStore.isUserAuthenticated);
 const storageKey = `input-${props.placeholder}`;
 const inputValue = ref(props.modelValue);
 const suggestions = ref(getSuggestions(storageKey));
@@ -64,6 +67,8 @@ const handleInput = (event: Event) => {
       @input="handleInput"
       :placeholder="props.placeholder"
       @blur="handleBlur"
+      :disabled="isAuthenticated"
+      :class="{'disabled': isAuthenticated}"
     />
     <ul v-if="filteredSuggestions.length" class="suggestions">
       <li

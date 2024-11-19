@@ -4,13 +4,15 @@ import RecipesPage from '../pages/RecipesPage.vue';
 import RecipeDetails from '../pages/RecipeDetailsPage.vue';
 import RecipeUpdate from '../pages/RecipeUpdatePage.vue';
 import UserUpdate from '../pages/UserUpdatePage.vue';
+import LayoutPage from '#src/pages/LayoutPage.vue';
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
+    path: '/recipes',
+    name: 'Recipes',
     component: RecipesPage,
   },
+
   {
     path: '/authentication',
     name: 'Authentication',

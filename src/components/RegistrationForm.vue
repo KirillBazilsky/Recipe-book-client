@@ -9,7 +9,7 @@ import PasswordInput from "./ui/PasswordInput.vue";
 import TextInput from "./ui/TextInput.vue";
 
 const usersStore = useUsersStore();
-const params = ref<IUser>({ name: "", email: "", password: "", id: null });
+const params = ref<IUser>({ name: "", email: "", password: "", _id: null });
 const errorMessage = ref<string | null>(null);
 const userMessage = ref<string | null>("Enter your credentials, please");
 
@@ -52,7 +52,7 @@ const onSubmit = async () => {
     </div>
     <div v-if="errorMessage" class="user-message error">{{ errorMessage }}</div>
     <div v-else class="user-message">{{ userMessage }}</div>
-    <button type="submit">Register</button>
+    <button type="submit">Create account</button>
   </form>
 </template>
 

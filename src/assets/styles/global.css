@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Outfit:wght@100..900&display=swap');
 
 :root {
     --main-bg-color: #f9f9f9;
@@ -7,6 +7,7 @@
     --secondary-color: #228765; 
     --error-bg-color: #ff4d4d;
     --neutral-gray: #d3c7c7d3;
+    --secondary-bg: #D6D9B0;
     --transition-speed: 0.3s; 
     --padding-size: 16px;
 }
@@ -15,7 +16,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Nunito Sans', sans-serif;
+    font-family: 'Outfit', sans-serif;
     font-weight: 400; 
     color: var(--main-color);
     background-color: var(--main-bg-color);
@@ -25,18 +26,26 @@ body {
     background-color: var(--main-bg-color);
 }
 
+.disabled {
+  opacity: 0.5;  
+  cursor: not-allowed; 
+}
+.disabled:hover{
+  color: var(--neutral-gray) !important
+}
+
 button {
-    width: 180px;
-    height: 50px;
+    width: 120px;
+    height: 30px;
     background-color: var(--main-color);
     border: none;
-    border-radius: 30px;
     color: var(--main-bg-color);
     font-size: 16px;
     cursor: pointer;
     transition: background-color var(--transition-speed), transform var(--transition-speed);
     display: inline-block;
     text-align: center;
+    box-shadow: 0px 0px 10px var(--neutral-gray);
 }
 
 button:hover {
@@ -78,8 +87,6 @@ form {
     padding: 32px;
     width: 100%;
     max-width: 400px;
-    height: auto;
-    min-height: 375px;
     height: auto;
     display: flex;
     flex-direction: column;
@@ -140,4 +147,13 @@ h1{
     width: 100vw;
     height: auto;
     position: relative;
+  }
+
+  .modal-blur{
+    width:100%;
+    height:100%;
+    position: absolute;
+    z-index: 9;
+    background-color: var(--neutral-gray);
+    backdrop-filter: blur(2px);
   }

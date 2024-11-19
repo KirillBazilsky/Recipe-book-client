@@ -19,3 +19,11 @@ export const loginRequest = async (params: AxiosRequestConfig<IUserCredentials>)
 
   return response;
 };
+
+export const getUserById = async (userId: string) => {
+  const response: AxiosResponse<IUserResponse> = await axios.get(
+    `${BASE_URL}/users/${userId}`
+  );
+
+  return response;
+};

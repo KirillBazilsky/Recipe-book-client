@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { AxiosError, AxiosRequestConfig } from "axios";
 import { useUsersStore } from "@/stores/users";
 import { IUserCredentials } from "@/interfaces/user";
@@ -13,6 +13,14 @@ const usersStore = useUsersStore();
 const params = ref<IUserCredentials>({ email: "", password: "" });
 const errorMessage = ref<string | null>(null);
 const userMessage = ref<string | null>("Enter your credentials, please");
+const isAuthenticated = computed(() => usersStore.isUserAuthenticated);
+const currentUser = computed(() => usersStore.getCurrentUser);
+
+onMounted(() => {
+  if (isAuthenticated.value) userMessage.value = `Welcome ${currentUser.value?.name ?? 'stranger'}`;
+});
+
+watch(() => currentUser.value, () => userMessage.value = `Greetings! you're authorized as ${currentUser.value?.name}`)
 
 const onSubmit = async () => {
   userMessage.value = null;
@@ -39,6 +47,11 @@ const onSubmit = async () => {
     errorMessage.value = errorHandler(error);
   }
 };
+
+const handleLogout = () => {
+  usersStore.logout();
+  userMessage.value = "logout successful";
+};
 </script>
 
 <template>
@@ -50,7 +63,8 @@ const onSubmit = async () => {
     </div>
     <div v-if="errorMessage" class="user-message error">{{ errorMessage }}</div>
     <div v-else class="user-message">{{ userMessage }}</div>
-    <button type="submit">Login</button>
+    <button v-if="!isAuthenticated" type="submit">Login</button>
+    <button v-else type="button" @click="handleLogout">Logout</button>
   </form>
 </template>
 

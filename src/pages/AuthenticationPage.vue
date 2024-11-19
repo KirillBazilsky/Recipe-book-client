@@ -20,8 +20,8 @@ const registerSwitcher = () => {
 <template>
   <h1>Welcome to the Recipe book site!</h1>
   <div class="button-wrapper">
-    <button @click="loginSwitcher" :class="{ 'active': isLoginFormOpen }">LOGIN</button>
-    <button @click="registerSwitcher" :class="{ 'active': isRegisterFormOpen }">REGISTER</button>
+    <button @click="loginSwitcher" :class="{ 'active': isLoginFormOpen }">Login</button>
+    <button @click="registerSwitcher" :class="{ 'active': isRegisterFormOpen }">Create account</button>
   </div>
   <div v-if="isLoginFormOpen" class="form-wrapper">
     <LoginForm />
@@ -42,6 +42,7 @@ const registerSwitcher = () => {
 }
 
 .active{
-  background-color: var(--secondary-color);
+  color: var(--secondary-bg);
+  text-shadow: 0 0 2px var(--secondary-bg);
 }
 </style>
