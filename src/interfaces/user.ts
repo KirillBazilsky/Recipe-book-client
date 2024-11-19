@@ -19,3 +19,10 @@ export interface IUserCredentials {
   email: string;
   password: string
 };
+
+export enum Autocomplete {
+  newPassword = 'new-password',
+  currentPassword = 'currentPassword',
+  off="off",
+  email="email"
+}

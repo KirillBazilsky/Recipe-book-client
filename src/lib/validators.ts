@@ -1,4 +1,4 @@
-import { INVALID_EMAIL, INVALID_NAME, INVALID_PASSWORD } from "#src/lib/errors/errorMessages.js";
+import { INVALID_EMAIL, INVALID_NAME, INVALID_PASSWORD, UNCONFIRMED_PASSWORD, UNMATCHED_PASSWORDS } from "@/constants/messages/errors.js";
 
 const namePattern = /^[^\s](?!.*\s{2})[a-zA-Z0-9\s]*[a-zA-Z][a-zA-Z0-9\s]*[^\s]$/;
 const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -14,3 +14,18 @@ export const credentialsValidator = (name: string, email: string, password: stri
 
   return '';
 } 
+
+export const updateCredentialsValidator = (name: string, email: string, password: string, confirmedPassword: string): string => {
+
+  if (!namePattern.test(name)) return INVALID_NAME;
+
+  if (!emailPattern.test(email)) return INVALID_EMAIL;
+
+  if (!passwordPattern.test(password)) return INVALID_PASSWORD;
+
+  if (password && !confirmedPassword) return UNCONFIRMED_PASSWORD;
+
+  if (password !== confirmedPassword) return UNMATCHED_PASSWORDS;
+
+  return '';
+}
