@@ -1,6 +1,141 @@
 <script setup lang="ts">
+import { IRecipe } from "@/interfaces/recipe.js";
+import { iconSwitcher } from "@/lib/iconSwitcher.js";
+import MdiIcon from "./MdiIcon.vue";
+
+interface IProps {
+  recipe: IRecipe | undefined;
+}
+const props = defineProps<IProps>();
 </script>
 
 <template>
-    <div>RECIPE ITEM</div>
+  <div class="card">
+    <MdiIcon
+      :icon="iconSwitcher(props.recipe?.category ?? '')"
+      :size="96"
+      color="#1c3d5a"
+      class="icon"
+    />
+    <div class="label-wrapper">
+      <h1>{{ props.recipe?.name }}</h1>
+    </div>
+    <h3 class="category">{{ props.recipe?.category }}</h3>
+    <h2>Ingredients</h2>
+    <div class="info-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <td>Ingredient</td>
+            <td>Quantity</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="ingredient in recipe?.ingredients" :key="ingredient.name">
+            <td>
+              {{ ingredient.name }}
+            </td>
+            <td>
+              {{ ingredient.quantity }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <h2>Instructions</h2>
+    <div class="info-wrapper">
+        <p> {{ recipe?.instructions }}</p>
+    </div>
+    <h4>Author: {{ recipe?.creator.name }}</h4>
+  </div>
 </template>
+
+<style lang="css" scoped>
+.card {
+  position: relative;
+  max-width: 55%;
+  margin: 16px Auto 0;
+  padding: var(--padding-size);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+.label-wrapper {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  border-bottom: 2px solid var(--neutral-gray);
+}
+
+h2 {
+  text-align: center; 
+  color: var(--secondary-color);
+  font-weight: 600;
+}
+
+h3 {
+  margin:-12px 0;
+  text-align: left;
+  font-style: italic;
+}
+
+h4 {
+  font-style: italic;
+  color: var(--secondary-color);
+}
+
+.icon {
+  margin: 8px auto;
+  display: block;
+  border: 2px solid var(--secondary-color);
+  border-radius: 50%;
+  padding: 4px;
+  background-color: white;
+  box-shadow: 0 0 12px var(--neutral-gray);
+}
+
+p::first-letter {
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--secondary-color);
+}
+
+.info-wrapper {
+  min-height: 100px;
+  background-color: var(--main-bg-color);
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 0 12px var(--neutral-gray);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead td{
+    padding-bottom: 12px;
+    font-style: italic;
+    font-weight: 600;
+}
+
+td {
+  border-bottom: solid 2px #fff; 
+  padding:2px 12px;
+}
+
+td:last-of-type {
+  border-left: solid 2px #fff; 
+}
+
+tbody tr:last-of-type td {
+  border-bottom: none;
+}
+
+@media (max-width: 768px){
+    .card{
+        max-width: 100%;
+    }
+}
+</style>
