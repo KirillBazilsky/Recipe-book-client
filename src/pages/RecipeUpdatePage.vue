@@ -4,5 +4,7 @@ import RecipeForm from '../components/RecipeForm.vue';
 </script>
 
 <template>
-    <RecipeForm />
+    <div class="page-wrapper recipe-update">
+        <RecipeForm />
+    </div>
 </template>

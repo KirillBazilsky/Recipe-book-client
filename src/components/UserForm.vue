@@ -1,6 +1,146 @@
 <script setup lang="ts">
+import { computed, onMounted, ref } from "vue";
+import { AxiosRequestConfig } from "axios";
+import { useUsersStore } from "@/stores/users";
+import { Autocomplete, IUser } from "@/interfaces/user";
+import { updateCredentialsValidator } from "@/lib/validators";
+import { errorHandler } from "@/lib/errors/errorHandler";
+import PasswordInput from "./ui/PasswordInput.vue";
+import TextInput from "./ui/TextInput.vue";
+import { watch } from "vue";
+import { blankUser } from "@/constants/appConstants";
+import { mdiRename } from "@mdi/js";
+import MdiIcon from "./MdiIcon.vue";
+import { NEED_LOGIN, EDIT_ACCOUNT } from "@/constants/messages/users"
+
+const usersStore = useUsersStore();
+const isAuthenticated = computed(() => usersStore.isAuthenticated);
+const currentUser = computed(() => usersStore.getCurrentUser);
+const userId = ref(currentUser.value?.id ?? "");
+const confirmedPassword = ref<string>("");
+const params = ref<IUser>(currentUser.value || blankUser);
+const errorMessage = ref<string | null>(null);
+const userMessage = ref<string | null>("");
+
+onMounted(() => {
+  if (!isAuthenticated.value) {
+    userMessage.value = NEED_LOGIN;
+
+    return;
+  }
+
+  userMessage.value = EDIT_ACCOUNT;
+});
+
+watch(
+  () => currentUser.value,
+  () => {
+    params.value = currentUser.value ?? blankUser;
+    userId.value = currentUser.value?.id ?? "";
+    params.value.password = "";
+  }
+);
+
+watch(
+  () => isAuthenticated.value,
+  () => {
+    if (!isAuthenticated.value) {
+      userMessage.value = NEED_LOGIN;
+
+      return;
+    }
+
+    userMessage.value = EDIT_ACCOUNT;
+  }
+);
+
+const onSubmit = async () => {
+  userMessage.value = null;
+
+  const config: AxiosRequestConfig<IUser> = {
+    data: params.value,
+  };
+
+  const name = params.value.name.trim();
+  const email = params.value.email.trim();
+  const password = params.value.password;
+
+  if (
+    updateCredentialsValidator(name, email, password, confirmedPassword.value)
+  ) {
+    errorMessage.value = updateCredentialsValidator(
+      name,
+      email,
+      password,
+      confirmedPassword.value
+    );
+
+    return;
+  }
+
+  try {
+    const {
+      data: { message, user },
+    } = await usersStore.updateUser(userId.value, config);
+
+    userMessage.value = `${message}, ${user.name}!`;
+    errorMessage.value = null;
+  } catch (error: unknown) {
+    errorMessage.value = errorHandler(error);
+  }
+};
 </script>
 
 <template>
-    <div>USERS FORM</div>
+  <form @submit.prevent="onSubmit" class="card">
+    <div class="input-wrapper">
+      <label>ACCOUNT</label>
+      <p><MdiIcon :icon="mdiRename" :size="16" color="#1c3d5a" />Username:</p>
+      <TextInput
+        type="text"
+        v-model="params.name"
+        placeholder=""
+        :class="{ disabled: !isAuthenticated }"
+      />
+      <p><MdiIcon :icon="mdiRename" :size="16" color="#1c3d5a" />Email:</p>
+      <TextInput
+        type="email"
+        v-model="params.email"
+        placeholder=""
+        :class="{ disabled: !isAuthenticated }"
+      />
+      <p><MdiIcon :icon="mdiRename" :size="16" color="#1c3d5a" />Password</p>
+      <PasswordInput
+        v-model="params.password"
+        :class="{ disabled: !isAuthenticated }"
+        :type="Autocomplete.newPassword"
+      />
+      <p>
+        <MdiIcon :icon="mdiRename" :size="16" color="#1c3d5a" />Confirm new
+        password
+      </p>
+      <PasswordInput
+        v-model="confirmedPassword"
+        :class="{ disabled: !isAuthenticated }"
+        :type="Autocomplete.newPassword"
+      />
+    </div>
+    <div v-if="errorMessage" class="user-message error">{{ errorMessage }}</div>
+    <div v-else class="user-message">{{ userMessage }}</div>
+    <button type="submit" :class="{ disabled: !isAuthenticated }">
+      Update
+    </button>
+  </form>
 </template>
+
+<style scoped>
+p {
+  background-color: white;
+  margin-bottom: -16px;
+  width: 100%;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+}
+</style>

@@ -1,27 +1,49 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { IRecipe, IRecipesFiltersParams } from "../interfaces/recipe";
-import { BASE_URL } from "../constants";
+import { BASE_URL } from "../constants/apiConstants.js";
 
-export const getRecipesRequest = async (params: AxiosRequestConfig<IRecipesFiltersParams>) => {
-    const response: AxiosResponse<IRecipe[]> = await axios.get(`${BASE_URL}/recipes`, params);
+export const getRecipesRequest = async (params: IRecipesFiltersParams) => {
+  const { data }: AxiosResponse<{ recipes: IRecipe[] }> = await axios.get(
+    `${BASE_URL}/recipes`,
+    { params }
+  );
 
-    return response.data
-}
+  return data.recipes;
+};
+
+export const getRecipeRequest = async (recipeId: string) => {
+  const response: AxiosResponse<{ recipe: IRecipe }> = await axios.get(
+    `${BASE_URL}/recipes/${recipeId}`
+  );
+
+  return response.data;
+};
 
 export const addRecipeRequest = async (params: AxiosRequestConfig<IRecipe>) => {
-    const response: AxiosResponse<IRecipe> = await axios.post(`${BASE_URL}/recipes`, params);
+  const { data }: AxiosResponse<IRecipe> = await axios.post(
+    `${BASE_URL}/recipes`,
+    params
+  );
 
-    return response.data
-}
+  return data;
+};
 
-export const updateRecipeRequest = async (params: AxiosRequestConfig<IRecipe>) => {
-    const response: AxiosResponse<IRecipe> = await axios.put(`${BASE_URL}/recipes`, params);
+export const updateRecipeRequest = async (
+  recipeId: string,
+  params: AxiosRequestConfig<IRecipe>
+) => {
+  const { data }: AxiosResponse<IRecipe> = await axios.put(
+    `${BASE_URL}/recipes/${recipeId}`,
+    params
+  );
 
-    return response.data
-}
+  return data;
+};
 
-export const deleteRecipeRequest = async (params: AxiosRequestConfig<{recipeId: string}>) => {
-    const response: AxiosResponse<string> = await axios.delete(`${BASE_URL}/recipes`, params);
+export const deleteRecipeRequest = async (recipeId: string) => {
+  const { data }: AxiosResponse<string> = await axios.delete(
+    `${BASE_URL}/recipes/${recipeId}`
+  );
 
-    return response.data
-}
+  return data;
+};

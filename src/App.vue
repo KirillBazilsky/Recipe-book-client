@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import LayoutPage from './pages/LayoutPage.vue';
+
 </script>
 
 <template>
-    <router-view></router-view>
+    <LayoutPage />
 </template>
