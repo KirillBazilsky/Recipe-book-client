@@ -15,6 +15,7 @@ const routes = [
     name: 'Recipes',
     component: RecipesPage,
   },
+
   {
     path: '/recipe/:id',
     name: 'Recipe',

@@ -10,7 +10,7 @@ import TextInput from "./ui/TextInput.vue";
 import { ENTER_CREDENTIALS } from "@/constants/messages/users";
 
 const usersStore = useUsersStore();
-const params = ref<IUser>({ name: "", email: "", password: "", id: null });
+const params = ref<IUser>({ name: "", email: "", password: "", _id: null });
 const errorMessage = ref<string | null>(null);
 const userMessage = ref<string | null>(ENTER_CREDENTIALS);
 
