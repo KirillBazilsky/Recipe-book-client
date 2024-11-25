@@ -18,30 +18,17 @@ const registerSwitcher = () => {
 </script>
 
 <template>
-  <h1>Welcome to the Recipe book site!</h1>
-  <div class="button-wrapper">
-    <button @click="loginSwitcher" :class="{ 'active': isLoginFormOpen }">LOGIN</button>
-    <button @click="registerSwitcher" :class="{ 'active': isRegisterFormOpen }">REGISTER</button>
-  </div>
-  <div v-if="isLoginFormOpen" class="form-wrapper">
-    <LoginForm />
-  </div>
-  <div v-if="isRegisterFormOpen" class="form-wrapper">
-    <RegistrationForm />
+  <div class="page-wrapper auth">
+    <h1>Welcome to the Recipe book site!</h1>
+    <div class="tab-button-wrapper">
+      <button @click="loginSwitcher" :class="{ 'active': isLoginFormOpen }">Login</button>
+      <button @click="registerSwitcher" :class="{ 'active': isRegisterFormOpen }">Create account</button>
+    </div>
+    <div v-if="isLoginFormOpen" class="form-wrapper">
+      <LoginForm />
+    </div>
+    <div v-if="isRegisterFormOpen" class="form-wrapper">
+      <RegistrationForm />
+    </div>
   </div>
 </template>
-
-<style>
-.button-wrapper{
-  width: 100vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  margin: 16px 0;
-}
-
-.active{
-  background-color: var(--secondary-color);
-}
-</style>

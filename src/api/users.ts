@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { IUser, IUserResponse, IUserCredentials } from "@/interfaces/user";
-import { BASE_URL } from "@/constants";
+import { BASE_URL } from "@/constants/apiConstants.js";
 
 export const registerRequest = async (params: AxiosRequestConfig<IUser>) => {
   const response: AxiosResponse<IUserResponse> = await axios.post(
@@ -11,9 +11,31 @@ export const registerRequest = async (params: AxiosRequestConfig<IUser>) => {
   return response;
 };
 
-export const loginRequest = async (params: AxiosRequestConfig<IUserCredentials>) => {
+export const loginRequest = async (
+  params: AxiosRequestConfig<IUserCredentials>
+) => {
   const response: AxiosResponse<IUserResponse> = await axios.post(
     `${BASE_URL}/auth/login`,
+    params
+  );
+
+  return response;
+};
+
+export const getUserById = async (userId: string) => {
+  const response: AxiosResponse<IUserResponse> = await axios.get(
+    `${BASE_URL}/users/${userId}`
+  );
+
+  return response;
+};
+
+export const updateUserRequest = async (
+  userId: string,
+  params: AxiosRequestConfig<IUser>
+) => {
+  const response: AxiosResponse<IUserResponse> = await axios.put(
+    `${BASE_URL}/users/${userId}`,
     params
   );
 

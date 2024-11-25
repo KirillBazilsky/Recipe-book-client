@@ -2,7 +2,7 @@ export interface IUser {
   name: string;
   email: string;
   password: string;
-  id: string | null;
+  _id: string | null;
 }
 
 export interface IUserResponse {
@@ -19,3 +19,10 @@ export interface IUserCredentials {
   email: string;
   password: string
 };
+
+export enum Autocomplete {
+  newPassword = 'new-password',
+  currentPassword = 'currentPassword',
+  off="off",
+  email="email"
+}
