@@ -1,9 +1,10 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import { AxiosRequestConfig, AxiosResponse } from "axios";
 import { IRecipe, IRecipesFiltersParams } from "../interfaces/recipe";
 import { BASE_URL } from "../constants/apiConstants.js";
+import { api } from "./api";
 
 export const getRecipesRequest = async (params: IRecipesFiltersParams) => {
-  const { data }: AxiosResponse<{ recipes: IRecipe[] }> = await axios.get(
+  const { data }: AxiosResponse<{ recipes: IRecipe[] }> = await api.get(
     `${BASE_URL}/recipes`,
     { params }
   );
@@ -12,7 +13,7 @@ export const getRecipesRequest = async (params: IRecipesFiltersParams) => {
 };
 
 export const getRecipeRequest = async (recipeId: string) => {
-  const response: AxiosResponse<{ recipe: IRecipe }> = await axios.get(
+  const response: AxiosResponse<{ recipe: IRecipe }> = await api.get(
     `${BASE_URL}/recipes/${recipeId}`
   );
 
@@ -20,7 +21,7 @@ export const getRecipeRequest = async (recipeId: string) => {
 };
 
 export const addRecipeRequest = async (params: AxiosRequestConfig<IRecipe>) => {
-  const { data }: AxiosResponse<IRecipe> = await axios.post(
+  const { data }: AxiosResponse<IRecipe> = await api.post(
     `${BASE_URL}/recipes`,
     params
   );
@@ -32,7 +33,7 @@ export const updateRecipeRequest = async (
   recipeId: string,
   params: AxiosRequestConfig<IRecipe>
 ) => {
-  const { data }: AxiosResponse<IRecipe> = await axios.put(
+  const { data }: AxiosResponse<IRecipe> = await api.put(
     `${BASE_URL}/recipes/${recipeId}`,
     params
   );
@@ -41,7 +42,7 @@ export const updateRecipeRequest = async (
 };
 
 export const deleteRecipeRequest = async (recipeId: string) => {
-  const { data }: AxiosResponse<string> = await axios.delete(
+  const { data }: AxiosResponse<string> = await api.delete(
     `${BASE_URL}/recipes/${recipeId}`
   );
 

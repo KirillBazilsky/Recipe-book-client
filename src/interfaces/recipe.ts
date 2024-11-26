@@ -1,6 +1,11 @@
+export interface IIngredient {
+  name: string;
+  quantity: string;
+}
+
 export interface IRecipe {
   name: string;
-  ingredients: { name: string; quantity: string }[];
+  ingredients: IIngredient[];
   instructions: string;
   category: string;
   creator: { name: string; id: string };
@@ -20,5 +25,5 @@ export interface IRecipesFiltersParams {
   category: string;
   creator: string;
   userId?: string;
-  id?: string
+  id?: string;
 }
