@@ -2,11 +2,38 @@
 import { IRecipe } from "@/interfaces/recipe.js";
 import { iconSwitcher } from "@/lib/iconSwitcher.js";
 import MdiIcon from "./MdiIcon.vue";
+import { useUsersStore } from "@/stores/users";
+import { computed, ref, watch } from "vue";
+import { checkAuthor } from "@/lib/checkAuthor";
+import { useRecipeStore } from "@/stores/recipes";
+import { errorHandler } from "@/lib/errors/errorHandler";
 
 interface IProps {
   recipe: IRecipe | undefined;
 }
 const props = defineProps<IProps>();
+
+const usersStore = useUsersStore();
+const recipeStore = useRecipeStore();
+const currentUser = computed(() => usersStore.getCurrentUser);
+const isAuthor = ref<boolean>(false);
+
+watch(
+  [() => usersStore.isAuthenticated, () => props.recipe?._id],
+  () => {
+    isAuthor.value = checkAuthor(currentUser.value, props.recipe);
+  }
+);
+
+const deleteRecipe = async () => {
+  try {
+    if (props.recipe && props.recipe._id) {
+      await recipeStore.deleteRecipe(props.recipe._id);
+    }
+  } catch (error: unknown) {
+    errorHandler(error);
+  }
+};
 </script>
 
 <template>
@@ -44,9 +71,13 @@ const props = defineProps<IProps>();
     </div>
     <h2>Instructions</h2>
     <div class="info-wrapper">
-        <p> {{ recipe?.instructions }}</p>
+      <p>{{ recipe?.instructions }}</p>
     </div>
     <h4>Author: {{ recipe?.creator.name }}</h4>
+    <div class="tab-button-wrapper" v-if="isAuthor">
+      <button>Update Recipe</button>
+      <button class="danger" @click="deleteRecipe">DELETE Recipe</button>
+    </div>
   </div>
 </template>
 
@@ -69,13 +100,13 @@ const props = defineProps<IProps>();
 }
 
 h2 {
-  text-align: center; 
+  text-align: center;
   color: var(--secondary-color);
   font-weight: 600;
 }
 
 h3 {
-  margin:-12px 0;
+  margin: -12px 0;
   text-align: left;
   font-style: italic;
 }
@@ -96,9 +127,9 @@ h4 {
 }
 
 p::first-letter {
-    font-size: 28px;
-    font-weight: 900;
-    color: var(--secondary-color);
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--secondary-color);
 }
 
 .info-wrapper {
@@ -110,32 +141,36 @@ p::first-letter {
 }
 
 table {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
 }
 
-thead td{
-    padding-bottom: 12px;
-    font-style: italic;
-    font-weight: 600;
+thead td {
+  padding-bottom: 12px;
+  font-style: italic;
+  font-weight: 600;
 }
 
 td {
-  border-bottom: solid 2px #fff; 
-  padding:2px 12px;
+  border-bottom: solid 2px #fff;
+  padding: 2px 12px;
 }
 
 td:last-of-type {
-  border-left: solid 2px #fff; 
+  border-left: solid 2px #fff;
 }
 
 tbody tr:last-of-type td {
   border-bottom: none;
 }
 
-@media (max-width: 768px){
-    .card{
-        max-width: 100%;
-    }
+.tab-button-wrapper {
+  width: auto;
+}
+
+@media (max-width: 768px) {
+  .card {
+    max-width: 100%;
+  }
 }
 </style>

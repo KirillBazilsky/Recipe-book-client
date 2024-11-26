@@ -13,6 +13,7 @@ import MdiIcon from "./MdiIcon.vue";
 import { mdiMagnify } from "@mdi/js";
 import router from "@/router";
 import Loader from "./Loader.vue";
+import UserMessage from "./ui/UserMessage.vue";
 
 interface IProps {
   userId?: string;
@@ -27,7 +28,6 @@ const currentUser = computed(() => usersStore.getCurrentUser);
 const isFiltersOpen = computed(() => recipeStore.getIsFiltersOpen);
 
 const filters = ref<IRecipesFiltersParams>({ ...defaultFilters });
-const errorMessage = ref<string>("");
 const isLoading = ref<boolean>(false);
 
 const toggleFilters = () => {
@@ -38,12 +38,12 @@ const getRecipes = async (
   filtersValue: IRecipesFiltersParams
 ): Promise<void> => {
   isLoading.value = true;
-  errorMessage.value = "";
+  usersStore.setMessage();
 
   try {
     await recipeStore.fetchRecipes(filtersValue);
   } catch (error: unknown) {
-    errorMessage.value = errorHandler(error);
+    usersStore.setMessage(errorHandler(error), "error");
   } finally {
     isLoading.value = false;
   }
@@ -150,11 +150,11 @@ const mobileFilterUpdate = () => {
   >
     <h2>Filters</h2>
     <div class="filter-inputs">
-      <p>Name</p>
+      <p><MdiIcon :icon="mdiMagnify" :size="16" color="#1c3d5a" />Name</p>
       <TextInput type="text" v-model="filters.name" placeholder="Name" />
     </div>
     <div class="filter-inputs">
-      <p>Ingredients</p>
+      <p><MdiIcon :icon="mdiMagnify" :size="16" color="#1c3d5a" />Ingredients</p>
       <TextInput
         type="text"
         v-model="filters.ingredients"
@@ -162,7 +162,7 @@ const mobileFilterUpdate = () => {
       />
     </div>
     <div class="filter-inputs">
-      <p>Category</p>
+      <p><MdiIcon :icon="mdiMagnify" :size="16" color="#1c3d5a" />Category</p>
       <TextInput
         type="text"
         v-model="filters.category"
@@ -170,7 +170,7 @@ const mobileFilterUpdate = () => {
       />
     </div>
     <div class="filter-inputs">
-      <p>Instructions</p>
+      <p><MdiIcon :icon="mdiMagnify" :size="16" color="#1c3d5a" />Instructions</p>
       <TextInput
         type="text"
         v-model="filters.instructions"
@@ -178,7 +178,7 @@ const mobileFilterUpdate = () => {
       />
     </div>
     <div class="filter-inputs" v-if="!props.userId">
-      <p>Author</p>
+      <p><MdiIcon :icon="mdiMagnify" :size="16" color="#1c3d5a" />Author</p>
       <TextInput type="text" v-model="filters.creator" placeholder="Author" />
     </div>
     <div class="filter-inputs">
@@ -190,7 +190,7 @@ const mobileFilterUpdate = () => {
       <button type="submit" @click="mobileFilterUpdate()">Update</button>
     </div>
   </form>
-  <div class="user-message error" v-if="errorMessage">{{ errorMessage }}</div>
+  <UserMessage />
   <div class="recipes-list-wrapper" v-if="!isLoading">
     <RecipeCard
       v-for="recipe in recipes"
@@ -205,7 +205,7 @@ const mobileFilterUpdate = () => {
 
 <style scoped>
 .recipes-list-wrapper {
-  width: 55%;
+  width: 100%;
   margin: 16px auto;
   display: flex;
   gap: 12px;
@@ -227,12 +227,12 @@ h2 {
   position: sticky;
   top: calc(var(--header-height) + 18px);
   margin-top: var(--padding-size);
-  padding-top: 50px;
-  width: 52%;
-  max-width: 55%;
-  height: 350px;
+  padding: 36px 8px 50px;
+  max-width: 96%;
+  height: auto;
   flex-wrap: wrap;
-  justify-content: left;
+  flex-direction: row;
+  justify-content: center;
   align-items: flex-start;
   z-index: 5;
 }
@@ -242,7 +242,7 @@ h2 {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  width: 45%;
+  width: 200px;
   min-height: 64px;
 }
 
@@ -263,7 +263,7 @@ p {
   display: flex;
   justify-content: center;
   position: absolute;
-  bottom: 16px;
+  bottom: 8px;
 }
 
 .filters-toggle {
@@ -280,9 +280,11 @@ p {
   .recipes-list-wrapper {
     width: 100%;
   }
-  .filters {
+  .filters.mobile{
+    display: flex;
     position: fixed;
     top: var(--header-height);
+    justify-content: center;
     margin-top: 0;
     height: auto;
     width: 100%;
@@ -296,7 +298,7 @@ p {
   }
 
   .filters-button-wrapper {
-    bottom: 6px;
+    bottom: 8px;
   }
 }
 </style>

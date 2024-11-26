@@ -11,7 +11,8 @@ import { watch } from "vue";
 import { blankUser } from "@/constants/appConstants";
 import { mdiRename } from "@mdi/js";
 import MdiIcon from "./MdiIcon.vue";
-import { NEED_LOGIN, EDIT_ACCOUNT } from "@/constants/messages/users"
+import { NEED_LOGIN, EDIT_ACCOUNT } from "@/constants/messages/users";
+import UserMessage from "./ui/UserMessage.vue";
 
 const usersStore = useUsersStore();
 const isAuthenticated = computed(() => usersStore.isAuthenticated);
@@ -19,17 +20,15 @@ const currentUser = computed(() => usersStore.getCurrentUser);
 const userId = ref(currentUser.value?.id ?? "");
 const confirmedPassword = ref<string>("");
 const params = ref<IUser>(currentUser.value || blankUser);
-const errorMessage = ref<string | null>(null);
-const userMessage = ref<string | null>("");
 
 onMounted(() => {
   if (!isAuthenticated.value) {
-    userMessage.value = NEED_LOGIN;
+    usersStore.setMessage(NEED_LOGIN, "error");
 
     return;
   }
 
-  userMessage.value = EDIT_ACCOUNT;
+  usersStore.setMessage(EDIT_ACCOUNT);
   params.value.password = "";
 });
 
@@ -46,17 +45,17 @@ watch(
   () => isAuthenticated.value,
   () => {
     if (!isAuthenticated.value) {
-      userMessage.value = NEED_LOGIN;
+      usersStore.setMessage(NEED_LOGIN, "error");
 
       return;
     }
 
-    userMessage.value = EDIT_ACCOUNT;
+    usersStore.setMessage(EDIT_ACCOUNT);
   }
 );
 
 const onSubmit = async () => {
-  userMessage.value = null;
+  usersStore.setMessage();
 
   const config: AxiosRequestConfig<IUser> = {
     data: params.value,
@@ -69,11 +68,14 @@ const onSubmit = async () => {
   if (
     updateCredentialsValidator(name, email, password, confirmedPassword.value)
   ) {
-    errorMessage.value = updateCredentialsValidator(
-      name,
-      email,
-      password,
-      confirmedPassword.value
+    usersStore.setMessage(
+      updateCredentialsValidator(
+        name,
+        email,
+        password,
+        confirmedPassword.value
+      ),
+      "error"
     );
 
     return;
@@ -84,16 +86,15 @@ const onSubmit = async () => {
       data: { message, user },
     } = await usersStore.updateUser(userId.value, config);
 
-    userMessage.value = `${message}, ${user.name}!`;
-    errorMessage.value = null;
+    usersStore.setMessage(`${message}, ${user.name}!`);
   } catch (error: unknown) {
-    errorMessage.value = errorHandler(error);
+    usersStore.setMessage(errorHandler(error), "error");
   }
 };
 </script>
 
 <template>
-  <form @submit.prevent="onSubmit" class="card">
+  <form @submit.prevent="onSubmit" class="card" :class="{ disabled: !isAuthenticated }">
     <div class="input-wrapper">
       <label>ACCOUNT</label>
       <p><MdiIcon :icon="mdiRename" :size="16" color="#1c3d5a" />Username:</p>
@@ -126,9 +127,8 @@ const onSubmit = async () => {
         :type="Autocomplete.newPassword"
       />
     </div>
-    <div v-if="errorMessage" class="user-message error">{{ errorMessage }}</div>
-    <div v-else class="user-message">{{ userMessage }}</div>
-    <button type="submit" :class="{ disabled: !isAuthenticated }">
+    <UserMessage />
+    <button type="submit">
       Update
     </button>
   </form>

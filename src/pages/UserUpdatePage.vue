@@ -16,7 +16,7 @@ const onTabClick = (tab: string) => {
 
 <template>
   <div class="page-wrapper user-update">
-    <div class="tab-button-wrapper">
+    <div class="tab-button-wrapper" :class="{'disabled': !currentUser}">
       <button
         @click="onTabClick('user-form')"
         :class="{ active: 'user-form' === openedTab }"

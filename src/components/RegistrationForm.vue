@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { AxiosRequestConfig } from "axios";
 import { useUsersStore } from "@/stores/users";
 import { Autocomplete, IUser } from "@/interfaces/user";
@@ -8,14 +8,17 @@ import { errorHandler } from "@/lib/errors/errorHandler.js";
 import PasswordInput from "./ui/PasswordInput.vue";
 import TextInput from "./ui/TextInput.vue";
 import { ENTER_CREDENTIALS } from "@/constants/messages/users";
+import UserMessage from "./ui/UserMessage.vue";
 
 const usersStore = useUsersStore();
-const params = ref<IUser>({ name: "", email: "", password: "", _id: null });
-const errorMessage = ref<string | null>(null);
-const userMessage = ref<string | null>(ENTER_CREDENTIALS);
+const params = ref<IUser>({ name: "", email: "", password: "", id: null });
+
+onMounted(() => {
+  usersStore.setMessage(ENTER_CREDENTIALS);
+})
 
 const onSubmit = async () => {
-  userMessage.value = null;
+  usersStore.setMessage();
 
   const config: AxiosRequestConfig<IUser> = {
     data: params.value,
@@ -26,7 +29,7 @@ const onSubmit = async () => {
   const password = params.value.password;
 
   if (credentialsValidator(name, email, password)) {
-    errorMessage.value = credentialsValidator(name, email, password);
+    usersStore.setMessage(credentialsValidator(name, email, password), "error");
 
     return;
   }
@@ -34,10 +37,13 @@ const onSubmit = async () => {
   try {
     const response = await usersStore.register(config);
 
-    userMessage.value = `${response.data.message}, welcome ${response.data.user.name}!`;
-    errorMessage.value = null;
-  } catch (error: unknown) {
-    errorMessage.value = errorHandler(error);
+    usersStore.setMessage(
+      `${response.data.message}, welcome ${response.data.user.name}!`
+    );
+  } 
+  
+  catch (error: unknown) {
+    usersStore.setMessage(errorHandler(error), "error");
   }
 };
 </script>
@@ -64,8 +70,7 @@ const onSubmit = async () => {
         :type="Autocomplete.newPassword"
       />
     </div>
-    <div v-if="errorMessage" class="user-message error">{{ errorMessage }}</div>
-    <div v-else class="user-message">{{ userMessage }}</div>
+    <UserMessage />
     <button type="submit">Create account</button>
   </form>
 </template>

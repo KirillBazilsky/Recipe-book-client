@@ -16,14 +16,14 @@ import MdiIcon from "./MdiIcon.vue";
 import SelectInput from "./ui/SelectInput.vue";
 import { validateRecipe } from "@/lib/recipeValidator";
 import { errorHandler } from "@/lib/errors/errorHandler";
-import { RECIPE_ADDED } from "@/constants/messages/users";
+import { NEED_LOGIN, RECIPE_ADDED } from "@/constants/messages/users";
+import UserMessage from "./ui/UserMessage.vue";
 
 const usersStore = useUsersStore();
 const recipesStore = useRecipeStore();
 const recipe = ref<IRecipe>({ ...defaultRecipe });
-const userMessage = ref<string>("");
-const errorMessage = ref<string>("");
 const isLoading = ref<boolean>(false);
+const isRecipeAdded = ref<boolean>(false);
 const currentUser = computed(() => usersStore.getCurrentUser);
 
 onMounted(() => {
@@ -33,7 +33,11 @@ onMounted(() => {
         name: currentUser.value.name,
         id: currentUser.value.id ?? "",
       };
+
+      return;
     }
+
+    usersStore.setMessage(NEED_LOGIN, "error");
   }
 });
 
@@ -45,15 +49,20 @@ watch(
         name: currentUser.value.name,
         id: currentUser.value.id ?? "",
       };
+
+      return;
     }
+
+    usersStore.setMessage(NEED_LOGIN, "error");
   }
 );
 
-watch(recipe.value, () => errorMessage.value = "")
+watch(recipe.value, () => {
+  usersStore.setMessage();
+});
 
 const onSubmit = async () => {
-  userMessage.value = "";
-  errorMessage.value = "";
+  usersStore.setMessage();
   isLoading.value = true;
 
   if (!recipe.value) {
@@ -61,7 +70,7 @@ const onSubmit = async () => {
   }
 
   if (validateRecipe(recipe.value)) {
-    errorMessage.value = validateRecipe(recipe.value) ?? "";
+    usersStore.setMessage(validateRecipe(recipe.value), "error");
     isLoading.value = false;
 
     return;
@@ -73,9 +82,10 @@ const onSubmit = async () => {
     };
 
     await recipesStore.addRecipe(config);
-    userMessage.value = RECIPE_ADDED;
+    usersStore.setMessage(RECIPE_ADDED);
+    isRecipeAdded.value = true;
   } catch (error) {
-    errorMessage.value = errorHandler(error);
+    usersStore.setMessage(errorHandler(error), "error");
   } finally {
     isLoading.value = false;
   }
@@ -100,16 +110,20 @@ const addOtherRecipe = () => {
       id: currentUser.value.id ?? "",
     };
   }
-  
+
   recipe.value.ingredients = [];
-  userMessage.value = "";
-  errorMessage.value = "";
+  usersStore.setMessage();
+  isRecipeAdded.value = false;
 };
 </script>
 
 <template>
   <h1>Adding recipe</h1>
-  <form @submit.prevent="onSubmit" class="card">
+  <form
+    @submit.prevent="onSubmit"
+    class="card"
+    :class="{ disabled: !currentUser }"
+  >
     <div class="input-wrapper">
       <p><MdiIcon :icon="mdiRename" :size="16" color="#1c3d5a" />Name</p>
       <TextInput
@@ -189,9 +203,10 @@ const addOtherRecipe = () => {
     <button type="submit" class="submit">
       Add recipe<Loader v-if="isLoading" />
     </button>
-    <div v-if="errorMessage" class="user-message error">{{ errorMessage }}</div>
-    <div v-if="userMessage" class="user-message">{{ userMessage }}</div>
-    <button @click="addOtherRecipe" v-if="userMessage">Add other recipe</button>
+    <UserMessage />
+    <button @click="addOtherRecipe" v-if="isRecipeAdded">
+      Add other recipe
+    </button>
   </form>
 </template>
 

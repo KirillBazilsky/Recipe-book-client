@@ -1,8 +1,8 @@
 export const disableLink = (link: string, isAuthenticated: boolean) => {
   if (isAuthenticated) {
-    if (link === "/authentication") return true;
+    return link === "/authentication";
   } else {
-    if (["/update-recipe", "/update-user"].includes(link)) return true;
+    return ["/update-recipe", "/update-user", "/create-recipe"].includes(link);
   }
 
   return false;
