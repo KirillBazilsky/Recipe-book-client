@@ -19,7 +19,6 @@ export const loginRequest = async (
     `${BASE_URL}/auth/login`,
     params
   );
-    console.log(response)
   return response;
 };
 

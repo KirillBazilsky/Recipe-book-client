@@ -1,3 +1,5 @@
+import { IMessage } from "./common";
+
 export interface IUser {
   name: string;
   email: string;
@@ -13,6 +15,7 @@ export interface IUserResponse {
 export interface IUserState {
   currentUser: IUser | null;
   isAuthenticated: boolean;
+  message: IMessage | undefined;
 }
 
 export interface IUserCredentials {

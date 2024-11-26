@@ -97,6 +97,10 @@ button {
     box-shadow: 0px 0px 6px #fff;
 }
 
+button.danger {
+    background-color: var(--error-bg-color);
+}
+
 .mdi-button{
     cursor: pointer;
     display: inline-block;
@@ -119,24 +123,6 @@ button:active {
 
 .mdi-button:active {
     transform: scale(0.98);
-}
-
-.user-message {
-    background-color: var(--secondary-color);
-    color: var(--main-bg-color);
-    border-radius: 8px;
-    padding: 20px;
-    font-size: 14px;
-    text-align: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    opacity: 0;
-    animation: fadeIn 0.5s forwards;
-    max-width: 600px;
-    margin: 16px auto 19px;
-}
-
-.user-message.error {
-    background-color: var(--error-bg-color);
 }
 
 @keyframes fadeIn {
@@ -176,7 +162,7 @@ form:hover {
 
 .input {
     width: 100%;
-    padding: 12px;
+    padding: 6px;
     padding-right: 28px;
     border: 1px solid #d1d1d1;
     border-radius: 8px;

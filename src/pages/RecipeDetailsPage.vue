@@ -3,6 +3,7 @@ import { useRoute } from "vue-router";
 import RecipeItem from "@/components/RecipeItem.vue";
 import { computed, onMounted } from "vue";
 import { useRecipeStore } from "@/stores/recipes.js";
+import { IRecipe } from "@/interfaces/recipe";
 
 const route = useRoute();
 const paramsId: string = route.params.id.toString();

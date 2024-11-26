@@ -8,6 +8,7 @@ import { disableLink } from "@/lib/linkDisabler.js";
 import { foodIconList } from "@/constants/iconConstants.js";
 import { navigationList } from "@/constants/navigationConstants.js";
 import { useRecipeStore } from "@/stores/recipes.js";
+import router from "@/router";
 
 const usersStore = useUsersStore();
 const recipeStore = useRecipeStore();
@@ -27,6 +28,11 @@ const toggleFilters = () => {
 const toggleMobileMenu = () => {
   setTimeout(() => (isMobileMenuOpen.value = !isMobileMenuOpen.value), 200);
 };
+
+const handleLogout = () => {
+  router.push("/recipes");
+  usersStore.logout();
+}
 </script>
 
 <template>
@@ -45,7 +51,7 @@ const toggleMobileMenu = () => {
     /></router-link>
     <button
       class="nav-button"
-      @click="usersStore.logout"
+      @click="handleLogout"
       :class="{ disabled: !isAuthenticated }"
     >
       Logout
@@ -83,7 +89,7 @@ const toggleMobileMenu = () => {
     >
     <button
       class="nav-link mobile"
-      @click="usersStore.logout"
+      @click="handleLogout"
       :class="{ disabled: !isAuthenticated }"
     >
       <MdiIcon :icon="randomizer()" :size="32" color="#fff" />Logout
