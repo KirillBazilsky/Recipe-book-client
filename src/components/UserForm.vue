@@ -30,6 +30,7 @@ onMounted(() => {
   }
 
   userMessage.value = EDIT_ACCOUNT;
+  params.value.password = "";
 });
 
 watch(

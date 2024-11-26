@@ -2,7 +2,7 @@ export interface IUser {
   name: string;
   email: string;
   password: string;
-  _id: string | null;
+  id: string | null;
 }
 
 export interface IUserResponse {

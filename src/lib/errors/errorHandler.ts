@@ -1,6 +1,7 @@
 import { AxiosError } from "axios";
 import {
   EMAIL_IN_USE,
+  EXISTING_RECIPE,
   INVALID_CREDENTIALS,
   INVALID_PASSWORD,
   NO_RECIPES_FOUND,
@@ -19,7 +20,13 @@ export const errorHandler = (error: unknown): string => {
 
     if (error.response?.data.message?.includes("No recipes found"))
       return NO_RECIPES_FOUND;
+
+    if(error.response?.data.message?.includes("Recipe with this name already exists")) {
+      return EXISTING_RECIPE
+    }
+
     return UNEXPECTED_ERROR;
   }
+  
   return "";
 };

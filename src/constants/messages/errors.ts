@@ -15,7 +15,18 @@ export const UNCONFIRMED_PASSWORD =
 export const UNMATCHED_PASSWORDS = 
   "Error: Yor confirmed password is different";
 export const NO_RECIPES_FOUND = 
-  "Error: no recipes found"
+  "Error: no recipes found";
+export const INVALID_CATEGORY = 
+  "Error: category is required and must be one of the dropdown list";
+export const INVALID_INSTRUCTIONS = 
+  "Error: instructions is required and must contain text";
+export const INVALID_INGREDIENTS = 
+  "Error: recipe must have at least one ingredient";
+export const INVALID_INGREDIENT = 
+  "Error: ingredient must have at name and quantity";
+export const EXISTING_RECIPE = 
+  "Error: recipe with this name already exist";
+
 
 
 

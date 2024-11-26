@@ -12,6 +12,7 @@ import { errorHandler } from "@/lib/errors/errorHandler.js";
 import MdiIcon from "./MdiIcon.vue";
 import { mdiMagnify } from "@mdi/js";
 import router from "@/router";
+import Loader from "./Loader.vue";
 
 interface IProps {
   userId?: string;
@@ -69,6 +70,7 @@ const goToRecipe = (id: string) => {
 
 onMounted(() => {
   defaultFilters.userId = undefined;
+  filters.value.userId = undefined;
   filters.value.creator = "";
 
   if (props.userId) {
@@ -189,7 +191,7 @@ const mobileFilterUpdate = () => {
     </div>
   </form>
   <div class="user-message error" v-if="errorMessage">{{ errorMessage }}</div>
-  <div class="recipes-list-wrapper">
+  <div class="recipes-list-wrapper" v-if="!isLoading">
     <RecipeCard
       v-for="recipe in recipes"
       :key="recipe._id"
@@ -197,6 +199,7 @@ const mobileFilterUpdate = () => {
       @click="goToRecipe(recipe._id ?? '')"
     />
   </div>
+  <Loader v-else />
   <div class="modal-blur" v-if="isFiltersOpen" @click="toggleFilters"></div>
 </template>
 

@@ -1,4 +1,4 @@
-import { IRecipe, IRecipesFiltersParams } from "@/interfaces/recipe";
+import { IIngredient, IRecipe, IRecipesFiltersParams } from "@/interfaces/recipe";
 
 export const sessionExpireTime = Date.now() + 60 * 60 * 1000;
 export const blankName = "Blank Name";
@@ -28,6 +28,11 @@ export const defaultFilters: IRecipesFiltersParams = {
   category: "",
   creator: "",
 };
+
+export const defaultIngredient: IIngredient = {
+  name: "",
+  quantity: ""
+}
 
 export const defaultRecipe: IRecipe = {
   creator: {
