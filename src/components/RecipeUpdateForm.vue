@@ -9,6 +9,7 @@ import { useRecipeStore } from "@/stores/recipes";
 import { useUsersStore } from "@/stores/users";
 import { AxiosRequestConfig } from "axios";
 import { computed, onMounted, ref, watch } from "vue";
+import { useRoute } from "vue-router";
 import TextInput from "./ui/TextInput.vue";
 import { mdiDelete, mdiPlus, mdiRename } from "@mdi/js";
 import Loader from "./Loader.vue";
@@ -16,46 +17,34 @@ import MdiIcon from "./MdiIcon.vue";
 import SelectInput from "./ui/SelectInput.vue";
 import { validateRecipe } from "@/lib/recipeValidator";
 import { errorHandler } from "@/lib/errors/errorHandler";
-import { NEED_LOGIN, RECIPE_ADDED } from "@/constants/messages/users";
+import { NEED_LOGIN, RECIPE_UPDATED } from "@/constants/messages/users";
 import UserMessage from "./ui/UserMessage.vue";
 
 const usersStore = useUsersStore();
 const recipesStore = useRecipeStore();
+const route = useRoute();
+const paramsId: string = route.params.id.toString();
+const currentRecipe = computed(() => recipesStore.getCurrentRecipe);
 const recipe = ref<IRecipe>({ ...defaultRecipe });
 const isLoading = ref<boolean>(false);
-const isRecipeAdded = ref<boolean>(false);
 const currentUser = computed(() => usersStore.getCurrentUser);
 
 onMounted(() => {
-  {
-    if (currentUser.value) {
-      recipe.value.creator = {
-        name: currentUser.value.name,
-        id: currentUser.value.id ?? "",
-      };
-
-      return;
-    }
-
-    usersStore.setMessage(NEED_LOGIN, "error");
+    recipesStore.fetchRecipe(paramsId);
+    if (currentRecipe.value) recipe.value = currentRecipe.value;
   }
-});
-
+)
 watch(
-  () => usersStore.currentUser,
+  () => currentUser.value,
   () => {
-    if (currentUser.value) {
-      recipe.value.creator = {
-        name: currentUser.value.name,
-        id: currentUser.value.id ?? "",
-      };
-
-      return;
-    }
-
+    if(!currentUser.value)
     usersStore.setMessage(NEED_LOGIN, "error");
   }
 );
+
+watch(() => currentRecipe.value, () => {
+  if (currentRecipe.value) recipe.value = currentRecipe.value;
+});
 
 watch(recipe.value, () => {
   usersStore.setMessage();
@@ -77,13 +66,12 @@ const onSubmit = async () => {
   }
 
   try {
-    const config: AxiosRequestConfig = {
+    const payload: AxiosRequestConfig = {
       data: recipe.value,
     };
 
-    await recipesStore.addRecipe(config);
-    usersStore.setMessage(RECIPE_ADDED);
-    isRecipeAdded.value = true;
+    await recipesStore.updateRecipe(paramsId, payload);
+    usersStore.setMessage(RECIPE_UPDATED);
   } catch (error) {
     usersStore.setMessage(errorHandler(error), "error");
   } finally {
@@ -101,30 +89,16 @@ const deleteIngredient = (number: number) => {
   );
 };
 
-const addOtherRecipe = () => {
-  recipe.value = { ...defaultRecipe };
-
-  if (currentUser.value) {
-    recipe.value.creator = {
-      name: currentUser.value.name,
-      id: currentUser.value.id ?? "",
-    };
-  }
-
-  recipe.value.ingredients = [];
-  usersStore.setMessage();
-  isRecipeAdded.value = false;
-};
 </script>
 
 <template>
-  <h1>Adding recipe</h1>
+  <h1>Edit recipe</h1>
   <form
     @submit.prevent="onSubmit"
     class="card recipe-form"
     :class="{ disabled: !currentUser }"
   >
-    <div class="input-wrapper recipe-form" >
+    <div class="input-wrapper recipe-form">
       <p class="recipe-form"><MdiIcon :icon="mdiRename" :size="16" color="#1c3d5a" />Name</p>
       <TextInput
         v-model="recipe.name"
@@ -133,7 +107,7 @@ const addOtherRecipe = () => {
         class="input-field"
       />
     </div>
-    <div class="input-wrapper recipe-form" >
+    <div class="input-wrapper recipe-form">
       <p class="recipe-form"><MdiIcon :icon="mdiRename" :size="16" color="#1c3d5a" />Category</p>
       <SelectInput
         v-model="recipe.category"
@@ -143,7 +117,7 @@ const addOtherRecipe = () => {
         class="input-field"
       />
     </div>
-    <div class="card inner recipe-form">
+    <div class="card recipe-form inner">
       <h3>Ingredients:</h3>
       <div
         v-for="(_ingredient, index) in recipe.ingredients"
@@ -151,7 +125,7 @@ const addOtherRecipe = () => {
         class="ingredient-wrapper"
       >
         <h4 class="label recipe-form">{{ `Ingredient ${index + 1}` }}</h4>
-        <div class="input-wrapper recipe-form" >
+        <div class="input-wrapper recipe-form">
           <p class="recipe-form"><MdiIcon :icon="mdiRename" :size="16" color="#1c3d5a" />Name</p>
           <TextInput
             v-model="recipe.ingredients[index].name"
@@ -159,7 +133,7 @@ const addOtherRecipe = () => {
             placeholder="name"
           />
         </div>
-        <div class="input-wrapper recipe-form" >
+        <div class="input-wrapper recipe-form">
           <p class="recipe-form">
             <MdiIcon :icon="mdiRename" :size="16" color="#1c3d5a" />Quantity
           </p>
@@ -186,7 +160,7 @@ const addOtherRecipe = () => {
       />
     </div>
     <div class="input-wrapper recipe-form instructions">
-      <p class="recipe-form">
+      <p>
         <MdiIcon :icon="mdiRename" :size="16" color="#1c3d5a" />Instructions
       </p>
       <textarea class="input" v-model="recipe.instructions"></textarea>
@@ -201,11 +175,10 @@ const addOtherRecipe = () => {
       />
     </div>
     <button type="submit" class="submit">
-      Add recipe<Loader v-if="isLoading" />
+      Send<Loader v-if="isLoading" />
     </button>
     <UserMessage class="recipe-form"/>
-    <button @click="addOtherRecipe" v-if="isRecipeAdded">
-      Add other recipe
-    </button>
   </form>
 </template>
+
+

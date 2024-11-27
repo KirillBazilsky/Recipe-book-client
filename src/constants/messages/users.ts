@@ -9,3 +9,7 @@ export const ENTER_CREDENTIALS = "Enter your credentials, please";
 export const EDIT_ACCOUNT = "Edit your account";
 
 export const RECIPE_ADDED = "Recipe successfully added";
+
+export const RECIPE_UPDATED = "Recipe successfully updated";
+
+export const RECIPE_DELETED = "recipe successfully deleted";

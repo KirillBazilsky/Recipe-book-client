@@ -3,10 +3,14 @@ import { IRecipe } from "@/interfaces/recipe.js";
 import { iconSwitcher } from "@/lib/iconSwitcher.js";
 import MdiIcon from "./MdiIcon.vue";
 import { useUsersStore } from "@/stores/users";
-import { computed, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { checkAuthor } from "@/lib/checkAuthor";
 import { useRecipeStore } from "@/stores/recipes";
 import { errorHandler } from "@/lib/errors/errorHandler";
+import UserMessage from "./ui/UserMessage.vue";
+import { redirectCountDown } from "@/lib/redirectCountdown";
+import router from "@/router";
+import { RECIPE_DELETED } from "@/constants/messages/users";
 
 interface IProps {
   recipe: IRecipe | undefined;
@@ -16,23 +20,36 @@ const props = defineProps<IProps>();
 const usersStore = useUsersStore();
 const recipeStore = useRecipeStore();
 const currentUser = computed(() => usersStore.getCurrentUser);
-const isAuthor = ref<boolean>(false);
+const isAuthor = ref<boolean>(checkAuthor(currentUser.value, props.recipe));
 
-watch(
-  [() => usersStore.isAuthenticated, () => props.recipe?._id],
-  () => {
-    isAuthor.value = checkAuthor(currentUser.value, props.recipe);
-  }
-);
+watch([() => usersStore.isAuthenticated, () => props.recipe?._id], () => {
+  isAuthor.value = checkAuthor(currentUser.value, props.recipe);
+});
+
+onMounted(() => {
+  usersStore.setMessage();
+})
 
 const deleteRecipe = async () => {
   try {
     if (props.recipe && props.recipe._id) {
       await recipeStore.deleteRecipe(props.recipe._id);
+
+      redirectCountDown(
+        RECIPE_DELETED,
+        5,
+        usersStore.setMessage
+      ).then(() => router.push("/recipes"));
     }
   } catch (error: unknown) {
     errorHandler(error);
   }
+};
+
+const goToRecipe = (id: string | undefined) => {
+  if (!id) return;
+
+  router.push({ name: "Update recipe", params: { id } });
 };
 </script>
 
@@ -75,9 +92,10 @@ const deleteRecipe = async () => {
     </div>
     <h4>Author: {{ recipe?.creator.name }}</h4>
     <div class="tab-button-wrapper" v-if="isAuthor">
-      <button>Update Recipe</button>
+      <button @click="goToRecipe(props.recipe?._id)">Update Recipe</button>
       <button class="danger" @click="deleteRecipe">DELETE Recipe</button>
     </div>
+    <UserMessage />
   </div>
 </template>
 
