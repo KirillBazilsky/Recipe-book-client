@@ -54,7 +54,7 @@ const clearFilters = () => {
     defaultFilters.userId = props.userId;
     filters.value = { ...defaultFilters };
     filters.value.creator = currentUser.value?.name || "";
-
+    getRecipes(filters.value);
     return;
   }
 
