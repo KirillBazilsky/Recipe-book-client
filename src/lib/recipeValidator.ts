@@ -20,25 +20,23 @@ export const validateRecipe = (recipe: IRecipe): string | undefined => {
     return INVALID_CATEGORY;
   }
 
-  if (!instructions && !stringValidator.test(instructions)) {
-    return INVALID_INSTRUCTIONS;
-  }
-
   if (!ingredients.length) {
     return INVALID_INGREDIENTS;
   }
 
-  ingredients.forEach((ingredient) => {
+  for (const ingredient of ingredients) {
     const isInvalid: boolean =
-      !stringValidator.test(ingredient.name) &&
+      !stringValidator.test(ingredient.name) ||
       !stringValidator.test(ingredient.quantity);
 
-    if (
-      isInvalid
-    ) {
+    if (isInvalid) {
       return INVALID_INGREDIENT;
     }
-  });
+  }
+
+  if (!instructions && !stringValidator.test(instructions)) {
+    return INVALID_INSTRUCTIONS;
+  }
 
   return;
 };

@@ -28,8 +28,8 @@ onMounted(() => {
     return;
   }
 
-  usersStore.setMessage(EDIT_ACCOUNT);
   params.value.password = "";
+  usersStore.setMessage(EDIT_ACCOUNT);
 });
 
 watch(

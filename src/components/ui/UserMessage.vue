@@ -42,9 +42,12 @@ watch(() => message.value?.type, () => {
   display: flex;
   gap: 8px;
   align-items: center;
+  white-space: pre-line;
 }
 
 .user-message.error {
   background-color: var(--error-bg-color);
 }
+
+
 </style>

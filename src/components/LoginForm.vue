@@ -11,6 +11,7 @@ import { blankName } from "@/constants/appConstants.js";
 import { ENTER_CREDENTIALS, GREETINGS, LOGOUT } from "@/constants/messages/users";
 import UserMessage from "./ui/UserMessage.vue";
 import router from "@/router";
+import { redirectCountDown } from "@/lib/redirectCountdown";
 
 const usersStore = useUsersStore();
 const params = ref<IUserCredentials>({ email: "", password: "" });
@@ -67,11 +68,11 @@ const onSubmit = async () => {
   }
 };
 
-const handleLogout = () => {
-  router.push("/recipes");
-
+const handleLogout = (timeout: number) => {
   usersStore.logout();
-  usersStore.setMessage(LOGOUT);
+  redirectCountDown(LOGOUT, timeout, usersStore.setMessage).then(() =>
+    router.push("/recipes")
+  );
 };
 
 </script>
@@ -94,8 +95,6 @@ const handleLogout = () => {
     </div>
     <UserMessage />
     <button v-if="!isAuthenticated" type="submit">Login</button>
-    <button v-else type="button" @click="handleLogout">Logout</button>
+    <button v-else type="button" @click="handleLogout(5)">Logout</button>
   </form>
 </template>
-
-<style scoped></style>

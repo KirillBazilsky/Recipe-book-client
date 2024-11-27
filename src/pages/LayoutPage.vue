@@ -9,6 +9,8 @@ import { foodIconList } from "@/constants/iconConstants.js";
 import { navigationList } from "@/constants/navigationConstants.js";
 import { useRecipeStore } from "@/stores/recipes.js";
 import router from "@/router";
+import { LOGOUT } from "@/constants/messages/users";
+import { redirectCountDown } from "@/lib/redirectCountdown";
 
 const usersStore = useUsersStore();
 const recipeStore = useRecipeStore();
@@ -22,17 +24,19 @@ onMounted(() => {
 });
 
 const toggleFilters = () => {
-  recipeStore.isFiltersOpen = !recipeStore.isFiltersOpen
-}
+  recipeStore.isFiltersOpen = !recipeStore.isFiltersOpen;
+};
 
 const toggleMobileMenu = () => {
   setTimeout(() => (isMobileMenuOpen.value = !isMobileMenuOpen.value), 200);
 };
 
-const handleLogout = () => {
-  router.push("/recipes");
+const handleLogout = (timeout: number) => {
   usersStore.logout();
-}
+  redirectCountDown(LOGOUT, timeout, usersStore.setMessage).then(() =>
+    router.push("/recipes")
+  );
+};
 </script>
 
 <template>
@@ -51,7 +55,7 @@ const handleLogout = () => {
     /></router-link>
     <button
       class="nav-button"
-      @click="handleLogout"
+      @click="handleLogout(5)"
       :class="{ disabled: !isAuthenticated }"
     >
       Logout
@@ -89,7 +93,7 @@ const handleLogout = () => {
     >
     <button
       class="nav-link mobile"
-      @click="handleLogout"
+      @click="handleLogout(5)"
       :class="{ disabled: !isAuthenticated }"
     >
       <MdiIcon :icon="randomizer()" :size="32" color="#fff" />Logout
@@ -194,7 +198,7 @@ const handleLogout = () => {
     flex-direction: column;
     justify-content: flex-start;
     position: fixed;
-    top:var(--header-height);
+    top: var(--header-height);
   }
   .nav-wrapper.mobile {
     z-index: 10;

@@ -18,7 +18,7 @@ const inputType = ref<string>("password")
   inputType.value = inputType.value === "password" ? "text" : "password";
 };
 
-watch(() => inputType.value, () => setTimeout(() => inputType.value = "password", 1500 ));
+watch(() => inputType.value, () => setTimeout(() => inputType.value = "password", 3000 ));
 
 const handleInput = (event: Event) => {
   const target = event.target as HTMLInputElement;
@@ -55,17 +55,17 @@ button {
     width: 20px;
     height: 20px;
     background-image: url('src/assets/icons/close-eye.svg');
-    background-color: var(--main-bg-color);
+    background-color: transparent;
     background-size: cover; 
     background-position: center;
     position: absolute;
-    top: 30%;
+    top: calc(50% - 10px);
     right: 8px;
     box-shadow: none;
 }
 
 button:hover {
-    background-color: var(--main-bg-color);
+    background-color: transparent;
 }
 
 button.openPassword {

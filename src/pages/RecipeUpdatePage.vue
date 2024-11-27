@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import RecipeCreateForm from '@/components/RecipeCreateForm.vue';
+import RecipeUpdateForm from '@/components/RecipeUpdateForm.vue';
 
 </script>
 
 <template>
     <div class="page-wrapper recipe-update">
-        <RecipeCreateForm />
+        <RecipeUpdateForm />
     </div>
 </template>

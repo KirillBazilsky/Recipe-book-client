@@ -26,6 +26,7 @@ export const useUsersStore = defineStore("user", {
     async fetchCurrentUser(payload: string) {
       const response: AxiosResponse<IUserResponse> = await getUserById(payload);
       this.currentUser = response.data.user;
+      this.currentUser.password = "";
     },
     async register(payload: AxiosRequestConfig<IUser>) {
       const response: AxiosResponse<IUserResponse> = await registerRequest(

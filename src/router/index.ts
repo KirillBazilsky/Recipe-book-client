@@ -1,9 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import LoginRegister from '../pages/AuthenticationPage.vue';
+import AuthenticationPage from '../pages/AuthenticationPage.vue';
 import RecipesPage from '../pages/RecipesPage.vue';
-import RecipeCreate from '../pages/RecipeCreatePage.vue';
-import UserUpdate from '../pages/UserUpdatePage.vue';
+import RecipeCreatePage from '../pages/RecipeCreatePage.vue';
+import UserUpdatePage from '../pages/UserUpdatePage.vue';
 import RecipeDetailsPage from '../pages/RecipeDetailsPage.vue';
+import RecipeUpdatePage from '@/pages/RecipeUpdatePage.vue';
 
 const routes = [
   {
@@ -24,17 +25,22 @@ const routes = [
   {
     path: '/authentication',
     name: 'Authentication',
-    component: LoginRegister,
+    component: AuthenticationPage,
   },
   {
     path: '/create-recipe',
     name: 'Create recipe',
-    component: RecipeCreate,
+    component: RecipeCreatePage,
+  },
+  {
+    path: '/update-recipe/:id',
+    name: 'Update recipe',
+    component: RecipeUpdatePage,
   },
   {
     path: '/update-user',
     name: 'Update user',
-    component: UserUpdate,
+    component: UserUpdatePage,
   },
 ];
 
