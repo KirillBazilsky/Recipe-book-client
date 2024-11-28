@@ -204,17 +204,6 @@ const mobileFilterUpdate = () => {
 </template>
 
 <style scoped>
-.recipes-list-wrapper {
-  width: 100%;
-  margin: 16px auto;
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  border-radius: 12px;
-  padding: var(--padding-size);
-}
 
 h2 {
   font-weight: 600;

@@ -11,6 +11,7 @@ import { useRecipeStore } from "@/stores/recipes.js";
 import router from "@/router";
 import { LOGOUT } from "@/constants/messages/users";
 import { redirectCountDown } from "@/lib/redirectCountdown";
+import { checkGuestAccess } from "@/lib/pageAccessChecker";
 
 const usersStore = useUsersStore();
 const recipeStore = useRecipeStore();
@@ -20,7 +21,10 @@ const isMobileMenuOpen = ref<boolean>(false);
 const userId = localStorage.getItem("currentUserId") ?? "";
 
 onMounted(() => {
-  if (userId) usersStore.fetchCurrentUser(userId);
+  if (userId) {
+    usersStore.fetchCurrentUser(userId);
+    usersStore.getUserFavorites(userId);
+  }
 });
 
 const toggleFilters = () => {
@@ -33,34 +37,44 @@ const toggleMobileMenu = () => {
 
 const handleLogout = (timeout: number) => {
   usersStore.logout();
-  redirectCountDown(LOGOUT, timeout, usersStore.setMessage).then(() =>
-    router.push("/recipes")
-  );
+
+  if(!checkGuestAccess()) {
+    redirectCountDown(LOGOUT, timeout, usersStore.setMessage).then(() => {
+      router.replace("/recipes")
+    });
+
+    return;
+  };
+
+  usersStore.setMessage(LOGOUT);
 };
 </script>
 
 <template>
-  <nav class="navigation">
+  <nav class="navigation" @click="usersStore.setMessage()">
     <router-link
       v-for="(link, index) in navigationList"
       :to="link.route"
+      :key="`nav-${link.label}`"
       class="nav-link"
       :class="{ disabled: disableLink(link.route, isAuthenticated) }"
       ><MdiIcon
         :icon="randomizer()"
         :size="32"
         color="#fff"
-        v-if="index === 0" />{{ link.label }}
-      <MdiIcon :icon="randomizer()" :size="32" color="#fff"
-    /></router-link>
+      />{{ link.label }}
+      </router-link>
+      <MdiIcon
+        :icon="randomizer()"
+        :size="32"
+        color="#fff"
+      />
     <button
       class="nav-button"
-      @click="handleLogout(5)"
+      @click="handleLogout(3)"
       :class="{ disabled: !isAuthenticated }"
-    >
-      Logout
+    >Logout
     </button>
-    <MdiIcon :icon="randomizer()" :size="32" color="#fff" />
   </nav>
   <div class="nav-wrapper mobile">
     <button class="nav-button mobile">
@@ -93,14 +107,14 @@ const handleLogout = (timeout: number) => {
     >
     <button
       class="nav-link mobile"
-      @click="handleLogout(5)"
+      @click="handleLogout(3)"
       :class="{ disabled: !isAuthenticated }"
     >
       <MdiIcon :icon="randomizer()" :size="32" color="#fff" />Logout
     </button>
   </nav>
   <div class="modal-blur mobile" v-if="isMobileMenuOpen"></div>
-  <router-view> </router-view>
+  <router-view @click="usersStore.setMessage()"> </router-view>
 </template>
 
 <style scoped lang="css">

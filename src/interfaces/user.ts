@@ -1,10 +1,13 @@
+import { ProfileTabs } from "@/constants/navigationConstants";
 import { IMessage } from "./common";
+import { IRecipe } from "./recipe";
 
 export interface IUser {
   name: string;
   email: string;
   password: string;
   id: string | null;
+  favoritesId?: string
 }
 
 export interface IUserResponse {
@@ -16,6 +19,8 @@ export interface IUserState {
   currentUser: IUser | null;
   isAuthenticated: boolean;
   message: IMessage | undefined;
+  favorites: IRecipe[] | null;
+  currentProfileTab: ProfileTabs
 }
 
 export interface IUserCredentials {

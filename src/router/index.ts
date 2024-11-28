@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import AuthenticationPage from '../pages/AuthenticationPage.vue';
 import RecipesPage from '../pages/RecipesPage.vue';
 import RecipeCreatePage from '../pages/RecipeCreatePage.vue';
-import UserUpdatePage from '../pages/UserUpdatePage.vue';
+import UserUpdatePage from '../pages/UserProfilePage.vue';
 import RecipeDetailsPage from '../pages/RecipeDetailsPage.vue';
 import RecipeUpdatePage from '@/pages/RecipeUpdatePage.vue';
 
@@ -38,8 +38,8 @@ const routes = [
     component: RecipeUpdatePage,
   },
   {
-    path: '/update-user',
-    name: 'Update user',
+    path: '/profile',
+    name: 'Profile',
     component: UserUpdatePage,
   },
 ];

@@ -11,6 +11,8 @@ import UserMessage from "./ui/UserMessage.vue";
 import { redirectCountDown } from "@/lib/redirectCountdown";
 import router from "@/router";
 import { RECIPE_DELETED } from "@/constants/messages/users";
+import { checkFavorites } from "@/lib/FavoritesChecker";
+import FavoriteHeart from "./ui/FavoriteHeart.vue";
 
 interface IProps {
   recipe: IRecipe | undefined;
@@ -21,6 +23,14 @@ const usersStore = useUsersStore();
 const recipeStore = useRecipeStore();
 const currentUser = computed(() => usersStore.getCurrentUser);
 const isAuthor = ref<boolean>(checkAuthor(currentUser.value, props.recipe));
+const isFavorite = ref<boolean>(false);
+const favorites = computed(() => usersStore.getFavorites);
+
+const setFavoriteStatus = () => {
+  if (favorites.value && props.recipe?._id) {
+    isFavorite.value = checkFavorites(favorites.value, props.recipe._id);
+  }
+};
 
 watch([() => usersStore.isAuthenticated, () => props.recipe?._id], () => {
   isAuthor.value = checkAuthor(currentUser.value, props.recipe);
@@ -28,18 +38,21 @@ watch([() => usersStore.isAuthenticated, () => props.recipe?._id], () => {
 
 onMounted(() => {
   usersStore.setMessage();
-})
+  setFavoriteStatus();
+});
+
+watch([() => favorites.value, () => props.recipe?._id], () => {
+  setFavoriteStatus();
+});
 
 const deleteRecipe = async () => {
   try {
     if (props.recipe && props.recipe._id) {
       await recipeStore.deleteRecipe(props.recipe._id);
 
-      redirectCountDown(
-        RECIPE_DELETED,
-        5,
-        usersStore.setMessage
-      ).then(() => router.push("/recipes"));
+      redirectCountDown(RECIPE_DELETED, 5, usersStore.setMessage).then(() =>
+        router.push("/recipes")
+      );
     }
   } catch (error: unknown) {
     errorHandler(error);
@@ -55,6 +68,7 @@ const goToRecipe = (id: string | undefined) => {
 
 <template>
   <div class="card">
+    <FavoriteHeart :recipe="props.recipe" />
     <MdiIcon
       :icon="iconSwitcher(props.recipe?.category ?? '')"
       :size="96"
@@ -142,6 +156,10 @@ h4 {
   padding: 4px;
   background-color: white;
   box-shadow: 0 0 12px var(--neutral-gray);
+}
+
+p {
+  white-space: pre-wrap;
 }
 
 p::first-letter {
