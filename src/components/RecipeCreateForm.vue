@@ -26,33 +26,30 @@ const isLoading = ref<boolean>(false);
 const isRecipeAdded = ref<boolean>(false);
 const currentUser = computed(() => usersStore.getCurrentUser);
 
-onMounted(() => {
-  {
-    if (currentUser.value) {
-      recipe.value.creator = {
-        name: currentUser.value.name,
-        id: currentUser.value.id ?? "",
-      };
-
-      return;
-    }
-
+const updateRecipeCreator = () => {
+  if (!currentUser.value) {
     usersStore.setMessage(NEED_LOGIN, "error");
+
+    return;
   }
+
+  const { name, id } = currentUser.value;
+
+  recipe.value.creator = {
+    name,
+    id: id ?? "",
+  };
+};
+
+onMounted(() => {
+  updateRecipeCreator();
+  usersStore.setMessage(NEED_LOGIN, "error");
 });
 
 watch(
   () => usersStore.currentUser,
   () => {
-    if (currentUser.value) {
-      recipe.value.creator = {
-        name: currentUser.value.name,
-        id: currentUser.value.id ?? "",
-      };
-
-      return;
-    }
-
+    updateRecipeCreator();
     usersStore.setMessage(NEED_LOGIN, "error");
   }
 );
@@ -124,8 +121,10 @@ const addOtherRecipe = () => {
     class="card recipe-form"
     :class="{ disabled: !currentUser }"
   >
-    <div class="input-wrapper recipe-form" >
-      <p class="recipe-form"><MdiIcon :icon="mdiRename" :size="16" color="#1c3d5a" />Name</p>
+    <div class="input-wrapper recipe-form">
+      <p class="recipe-form">
+        <MdiIcon :icon="mdiRename" :size="16" color="#1c3d5a" />Name
+      </p>
       <TextInput
         v-model="recipe.name"
         type="text"
@@ -133,8 +132,10 @@ const addOtherRecipe = () => {
         class="input-field"
       />
     </div>
-    <div class="input-wrapper recipe-form" >
-      <p class="recipe-form"><MdiIcon :icon="mdiRename" :size="16" color="#1c3d5a" />Category</p>
+    <div class="input-wrapper recipe-form">
+      <p class="recipe-form">
+        <MdiIcon :icon="mdiRename" :size="16" color="#1c3d5a" />Category
+      </p>
       <SelectInput
         v-model="recipe.category"
         type="text"
@@ -151,15 +152,17 @@ const addOtherRecipe = () => {
         class="ingredient-wrapper"
       >
         <h4 class="label recipe-form">{{ `Ingredient ${index + 1}` }}</h4>
-        <div class="input-wrapper recipe-form" >
-          <p class="recipe-form"><MdiIcon :icon="mdiRename" :size="16" color="#1c3d5a" />Name</p>
+        <div class="input-wrapper recipe-form">
+          <p class="recipe-form">
+            <MdiIcon :icon="mdiRename" :size="16" color="#1c3d5a" />Name
+          </p>
           <TextInput
             v-model="recipe.ingredients[index].name"
             type="text"
             placeholder="name"
           />
         </div>
-        <div class="input-wrapper recipe-form" >
+        <div class="input-wrapper recipe-form">
           <p class="recipe-form">
             <MdiIcon :icon="mdiRename" :size="16" color="#1c3d5a" />Quantity
           </p>

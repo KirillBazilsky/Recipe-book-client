@@ -53,7 +53,7 @@ const handleSelect = (value: string) => {
         <li class="option" @click="handleSelect('')">
             Unset
         </li>
-      <li v-for="option in filteredOptions" @click="handleSelect(option)" class="option">
+      <li v-for="option in filteredOptions" @click="handleSelect(option)" :key="option" class="option">
         {{ option }}
       </li>
     </ul>

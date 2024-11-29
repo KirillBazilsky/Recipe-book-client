@@ -1,9 +1,10 @@
+import { accessBlackList } from "@/constants/navigationConstants";
+import { checkGuestAccess } from "./pageAccessChecker";
+
 export const disableLink = (link: string, isAuthenticated: boolean) => {
   if (isAuthenticated) {
-    return link === "/authentication";
-  } else {
-    return ["/update-recipe", "/update-user", "/create-recipe"].includes(link);
+    return accessBlackList.includes(link);
   }
 
-  return false;
+  return !checkGuestAccess(link);
 };

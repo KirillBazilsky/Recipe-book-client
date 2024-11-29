@@ -2,6 +2,7 @@
 import { IRecipe } from "@/interfaces/recipe.js";
 import { iconSwitcher } from "@/lib/iconSwitcher.js";
 import MdiIcon from "./MdiIcon.vue";
+import FavoriteHeart from "./ui/FavoriteHeart.vue";
 
 interface IProps {
   recipe: IRecipe;
@@ -22,6 +23,7 @@ const props = defineProps<IProps>();
     <p>{{ props.recipe.category }}</p>
     <h6>Author:</h6>
     <p>{{ props.recipe.creator.name }}</p>
+    <FavoriteHeart :recipe="props.recipe" isList />
   </div>
 </template>
 
@@ -85,4 +87,3 @@ p {
   border-radius: 50%;
 }
 </style>
-

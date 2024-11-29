@@ -27,6 +27,10 @@ export const errorHandler = (error: unknown): string => {
 
     return UNEXPECTED_ERROR;
   }
+
+  if(error instanceof Error) {
+    return error.message
+  }
   
-  return "";
+  return UNEXPECTED_ERROR;
 };

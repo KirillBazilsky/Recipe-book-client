@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { PASSWORD_REQUIREMENTS } from '@/constants/messages/users';
 import { Autocomplete } from '@/interfaces/user.js';
 import { useUsersStore } from '@/stores/users.js';
 import { computed, ref, watch } from 'vue';
@@ -43,10 +44,11 @@ const handleInput = (event: Event) => {
             :autocomplete="props.type"
         ></input>
         <button 
-            @click.prevent="togglePasswordHide"
-            type="button"
-            :class="{ 'openPassword': inputType !=='text', 'disabled': isAuthenticated && canDisabled}"
+        @click.prevent="togglePasswordHide"
+        type="button"
+        :class="{ 'openPassword': inputType !=='text', 'disabled': isAuthenticated && canDisabled}"
         ></button>
+        <p class="tips">{{ PASSWORD_REQUIREMENTS }}</p>
     </div>
 </template>
 
@@ -59,9 +61,10 @@ button {
     background-size: cover; 
     background-position: center;
     position: absolute;
-    top: calc(50% - 10px);
+    top: 6px;
     right: 8px;
     box-shadow: none;
+    z-index: 2;
 }
 
 button:hover {

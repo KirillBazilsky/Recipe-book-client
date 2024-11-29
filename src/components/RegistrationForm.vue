@@ -3,7 +3,7 @@ import { onMounted, ref } from "vue";
 import { AxiosRequestConfig } from "axios";
 import { useUsersStore } from "@/stores/users";
 import { Autocomplete, IUser } from "@/interfaces/user";
-import { credentialsValidator } from "@/lib/validators";
+import { credentialsValidator } from "@/lib/credentialValidators";
 import { errorHandler } from "@/lib/errors/errorHandler.js";
 import PasswordInput from "./ui/PasswordInput.vue";
 import TextInput from "./ui/TextInput.vue";
@@ -53,7 +53,7 @@ const onSubmit = async () => {
     <div class="input-wrapper">
       <label>REGISTER FORM</label>
       <TextInput
-        type="text"
+        type="name"
         v-model="params.name"
         placeholder="Name"
         canDisabled

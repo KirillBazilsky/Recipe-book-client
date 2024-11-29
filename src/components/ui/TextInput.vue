@@ -6,12 +6,13 @@ import { getSuggestions } from "@/lib/getSuggestions.js";
 import { pushValueToSuggestions } from "@/lib/pushValueToSuggestions.js";
 import { setLocalStorageItem } from "@/lib/setLocalStorageItem.js";
 import { computed, ref, watch } from "vue";
+import { NAME_REQUIREMENTS } from "@/constants/messages/users";
 
 interface IProps {
   modelValue: string;
   type: string;
   placeholder: string;
-  canDisabled?: boolean
+  canDisabled?: boolean;
 }
 
 const props = defineProps<IProps>();
@@ -73,7 +74,7 @@ const handleInput = (event: Event) => {
       @keydown.enter="handleInput"
       @blur="handleBlur"
       :disabled="isAuthenticated && canDisabled"
-      :class="{'disabled': isAuthenticated && canDisabled}"
+      :class="{ disabled: isAuthenticated && canDisabled }"
       :autocomplete="props.type"
       class="input"
     />
@@ -86,6 +87,7 @@ const handleInput = (event: Event) => {
         {{ option }}
       </li>
     </ul>
+    <div class="tips" v-if="props.type === 'name'">{{ NAME_REQUIREMENTS }}</div>
   </div>
 </template>
 
@@ -113,5 +115,9 @@ const handleInput = (event: Event) => {
 
 .suggestions li:hover {
   background-color: #f0f0f0;
+}
+
+.disabled .tips{
+  display: none;
 }
 </style>

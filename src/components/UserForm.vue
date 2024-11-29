@@ -3,7 +3,7 @@ import { computed, onMounted, ref } from "vue";
 import { AxiosRequestConfig } from "axios";
 import { useUsersStore } from "@/stores/users";
 import { Autocomplete, IUser } from "@/interfaces/user";
-import { updateCredentialsValidator } from "@/lib/validators";
+import { updateCredentialsValidator } from "@/lib/credentialValidators";
 import { errorHandler } from "@/lib/errors/errorHandler";
 import PasswordInput from "./ui/PasswordInput.vue";
 import TextInput from "./ui/TextInput.vue";
@@ -19,40 +19,19 @@ const isAuthenticated = computed(() => usersStore.isAuthenticated);
 const currentUser = computed(() => usersStore.getCurrentUser);
 const userId = ref(currentUser.value?.id ?? "");
 const confirmedPassword = ref<string>("");
-const params = ref<IUser>(currentUser.value || blankUser);
+const params = ref<IUser>({ ...blankUser });
 
 onMounted(() => {
   if (!isAuthenticated.value) {
     usersStore.setMessage(NEED_LOGIN, "error");
-
     return;
   }
-
-  params.value.password = "";
-  usersStore.setMessage(EDIT_ACCOUNT);
-});
-
-watch(
-  () => currentUser.value,
-  () => {
-    params.value = currentUser.value ?? blankUser;
-    userId.value = currentUser.value?.id ?? "";
+  if (currentUser.value) {
+    params.value = currentUser.value;
+    userId.value = currentUser.value.id ?? "";
     params.value.password = "";
   }
-);
-
-watch(
-  () => isAuthenticated.value,
-  () => {
-    if (!isAuthenticated.value) {
-      usersStore.setMessage(NEED_LOGIN, "error");
-
-      return;
-    }
-
-    usersStore.setMessage(EDIT_ACCOUNT);
-  }
-);
+});
 
 const onSubmit = async () => {
   usersStore.setMessage();
@@ -94,12 +73,16 @@ const onSubmit = async () => {
 </script>
 
 <template>
-  <form @submit.prevent="onSubmit" class="card" :class="{ disabled: !isAuthenticated }">
+  <form
+    @submit.prevent="onSubmit"
+    class="card"
+    :class="{ disabled: !isAuthenticated }"
+  >
     <div class="input-wrapper">
       <label>ACCOUNT</label>
       <p><MdiIcon :icon="mdiRename" :size="16" color="#1c3d5a" />Username:</p>
       <TextInput
-        type="text"
+        type="name"
         v-model="params.name"
         placeholder=""
         :class="{ disabled: !isAuthenticated }"
@@ -128,9 +111,7 @@ const onSubmit = async () => {
       />
     </div>
     <UserMessage />
-    <button type="submit">
-      Update
-    </button>
+    <button type="submit">Update</button>
   </form>
 </template>
 

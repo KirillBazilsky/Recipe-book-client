@@ -1,7 +1,7 @@
 export const redirectCountDown = async (
   message: string,
   count: number,
-  setMessage: (message: string, isError?: string) => void
+  setMessage: (message?: string, isError?: string) => void
 ): Promise<void> => {
 
   setMessage(`${message},\nredirect in\n${count}`);
@@ -12,5 +12,9 @@ export const redirectCountDown = async (
     count--;
 
     setMessage(`${message},\nredirect in\n${count}`);
+
+    if (!count) {
+      setMessage();
+    }
   }
 };

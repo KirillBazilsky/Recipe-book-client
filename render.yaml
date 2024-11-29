@@ -1,0 +1,6 @@
+services:
+  - type: web
+    runtime: node
+    name: vite-client
+    buildCommand: npm run build 
+    plan: free
