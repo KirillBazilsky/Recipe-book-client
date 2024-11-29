@@ -134,9 +134,6 @@ export const useUsersStore = defineStore("user", {
 
       this.favorites = [...(this.favorites ?? []), recipe];
 
-      if (favoriteId === "new-favorites" && payload.data?.userId) {
-        this.fetchCurrentUser(payload.data?.userId);
-      }
 
       return response;
     },
