@@ -43,17 +43,16 @@ const handleAddFavorite = async () => {
     return;
   }
 
-  const FavoritesId = currentUser.value?.favoritesId || "new-favorites";
+  const FavoritesId = currentUser.value?.favoritesId ?? "";
 
   const payload: AxiosRequestConfig<IFavoritesParams> = {
     data: {
-      userId: currentUser.value?.id ?? "",
       recipeId: props.recipe?._id ?? "",
     },
   };
 
-  if (props.recipe) {
-    usersStore.addFavorite(FavoritesId, payload, props.recipe);
+  if (props.recipe && currentUser.value?.favoritesId) {
+    usersStore.addFavorite(currentUser.value?.favoritesId, payload, props.recipe);
   }
 };
 
