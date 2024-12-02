@@ -5,11 +5,10 @@ import { IFavoritesParams } from "@/interfaces/favorites";
 import { IRecipe } from "@/interfaces/recipe";
 
 export const addFavoriteRequest = async (
-  favoritesId: string,
   params: AxiosRequestConfig<IFavoritesParams>
 ) => {
   const response: AxiosResponse = await api.post(
-    `${BASE_URL}/favorites/${favoritesId}`,
+    `${BASE_URL}/favorites/`,
     params
   );
 
@@ -17,11 +16,10 @@ export const addFavoriteRequest = async (
 };
 
 export const removeFavoriteRequest = async (
-  favoritesId: string,
   params: AxiosRequestConfig<{ recipeId: string }> 
 ) => {
   const response: AxiosResponse = await api.delete(
-    `${BASE_URL}/favorites/${favoritesId}`,
+    `${BASE_URL}/favorites/`,
     params
   );
 

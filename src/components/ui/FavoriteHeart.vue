@@ -43,21 +43,18 @@ const handleAddFavorite = async () => {
     return;
   }
 
-  const FavoritesId = currentUser.value?.favoritesId ?? "";
-
   const payload: AxiosRequestConfig<IFavoritesParams> = {
     data: {
       recipeId: props.recipe?._id ?? "",
     },
   };
 
-  if (props.recipe && currentUser.value?.favoritesId) {
-    usersStore.addFavorite(currentUser.value?.favoritesId, payload, props.recipe);
+  if (props.recipe) {
+    usersStore.addFavorite(payload, props.recipe);
   }
 };
 
 const handleDeleteFromFavorites = async () => {
-  const FavoritesId = currentUser.value?.favoritesId;
 
   const payload: AxiosRequestConfig<{ recipeId: string }> = {
     data: {
@@ -65,7 +62,7 @@ const handleDeleteFromFavorites = async () => {
     },
   };
 
-  usersStore.removeFavorite(FavoritesId ?? "", payload);
+  usersStore.removeFavorite(payload);
 };
 </script>
 
