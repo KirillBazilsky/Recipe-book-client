@@ -123,12 +123,10 @@ export const useUsersStore = defineStore("user", {
     },
 
     async addFavorite(
-      favoriteId: string,
       payload: AxiosRequestConfig<IFavoritesParams>,
       recipe: IRecipe
     ) {
       const response: AxiosResponse = await addFavoriteRequest(
-        favoriteId,
         payload
       );
 
@@ -139,11 +137,9 @@ export const useUsersStore = defineStore("user", {
     },
 
     async removeFavorite(
-      favoriteId: string,
       payload: AxiosRequestConfig<{ recipeId: string }>
     ) {
       const response: AxiosResponse = await removeFavoriteRequest(
-        favoriteId,
         payload
       );
 
