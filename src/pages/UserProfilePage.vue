@@ -4,20 +4,20 @@ import { computed } from "vue";
 import UserForm from "@/components/UserForm.vue";
 import RecipesList from "@/components/RecipesList.vue";
 import Favorites from "@/components/Favorites.vue";
-import { ProfileTabs } from "@/constants/navigationConstants";
+import { ProfileTabs } from "@/constants/navigation";
 
 const userStore = useUsersStore();
 const currentUser = computed(() => userStore.getCurrentUser);
 const openedTab = computed(() => userStore.getCurrentProfileTab);
 
 const onTabClick = (tab: ProfileTabs) => {
-  userStore.setCurrentProfileTab(tab)
+  userStore.setCurrentProfileTab(tab);
 };
 </script>
 
 <template>
   <div class="page-wrapper user-update">
-    <div class="tab-button-wrapper" :class="{'disabled': !currentUser}">
+    <div class="tab-button-wrapper" :class="{ disabled: !currentUser }">
       <button
         @click="onTabClick(ProfileTabs.userForm)"
         :class="{ active: 'user-form' === openedTab }"

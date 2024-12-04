@@ -3,7 +3,7 @@ import {
   categoriesList,
   defaultIngredient,
   defaultRecipe,
-} from "@/constants/appConstants";
+} from "@/constants/app";
 import { IRecipe } from "@/interfaces/recipe";
 import { useRecipeStore } from "@/stores/recipes";
 import { useUsersStore } from "@/stores/users";
@@ -30,21 +30,22 @@ const isLoading = ref<boolean>(false);
 const currentUser = computed(() => usersStore.getCurrentUser);
 
 onMounted(() => {
-    recipesStore.fetchRecipe(paramsId);
-    if (currentRecipe.value) recipe.value = currentRecipe.value;
-  }
-)
+  recipesStore.fetchRecipe(paramsId);
+  if (currentRecipe.value) recipe.value = currentRecipe.value;
+});
 watch(
   () => currentUser.value,
   () => {
-    if(!currentUser.value)
-    usersStore.setMessage(NEED_LOGIN, "error");
+    if (!currentUser.value) usersStore.setMessage(NEED_LOGIN, "error");
   }
 );
 
-watch(() => currentRecipe.value, () => {
-  if (currentRecipe.value) recipe.value = currentRecipe.value;
-});
+watch(
+  () => currentRecipe.value,
+  () => {
+    if (currentRecipe.value) recipe.value = currentRecipe.value;
+  }
+);
 
 watch(recipe.value, () => {
   usersStore.setMessage();
@@ -88,7 +89,6 @@ const deleteIngredient = (number: number) => {
     (_ingredient, index) => index !== number
   );
 };
-
 </script>
 
 <template>
@@ -99,7 +99,9 @@ const deleteIngredient = (number: number) => {
     :class="{ disabled: !currentUser }"
   >
     <div class="input-wrapper recipe-form">
-      <p class="recipe-form"><MdiIcon :icon="mdiRename" :size="16" color="#1c3d5a" />Name</p>
+      <p class="recipe-form">
+        <MdiIcon :icon="mdiRename" :size="16" color="#1c3d5a" />Name
+      </p>
       <TextInput
         v-model="recipe.name"
         type="text"
@@ -108,7 +110,9 @@ const deleteIngredient = (number: number) => {
       />
     </div>
     <div class="input-wrapper recipe-form">
-      <p class="recipe-form"><MdiIcon :icon="mdiRename" :size="16" color="#1c3d5a" />Category</p>
+      <p class="recipe-form">
+        <MdiIcon :icon="mdiRename" :size="16" color="#1c3d5a" />Category
+      </p>
       <SelectInput
         v-model="recipe.category"
         type="text"
@@ -126,7 +130,9 @@ const deleteIngredient = (number: number) => {
       >
         <h4 class="label recipe-form">{{ `Ingredient ${index + 1}` }}</h4>
         <div class="input-wrapper recipe-form">
-          <p class="recipe-form"><MdiIcon :icon="mdiRename" :size="16" color="#1c3d5a" />Name</p>
+          <p class="recipe-form">
+            <MdiIcon :icon="mdiRename" :size="16" color="#1c3d5a" />Name
+          </p>
           <TextInput
             v-model="recipe.ingredients[index].name"
             type="text"
@@ -177,8 +183,6 @@ const deleteIngredient = (number: number) => {
     <button type="submit" class="submit">
       Send<Loader v-if="isLoading" />
     </button>
-    <UserMessage class="recipe-form"/>
+    <UserMessage class="recipe-form" />
   </form>
 </template>
-
-

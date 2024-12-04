@@ -3,7 +3,7 @@ import {
   categoriesList,
   defaultIngredient,
   defaultRecipe,
-} from "@/constants/appConstants";
+} from "@/constants/app";
 import { IRecipe } from "@/interfaces/recipe";
 import { useRecipeStore } from "@/stores/recipes";
 import { useUsersStore } from "@/stores/users";
@@ -206,7 +206,7 @@ const addOtherRecipe = () => {
     <button type="submit" class="submit">
       Add recipe<Loader v-if="isLoading" />
     </button>
-    <UserMessage class="recipe-form"/>
+    <UserMessage class="recipe-form" />
     <button @click="addOtherRecipe" v-if="isRecipeAdded">
       Add other recipe
     </button>

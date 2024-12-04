@@ -48,7 +48,8 @@ const props = defineProps<IProps>();
 
 h4 {
   margin: 8px 0;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
+  max-height: 2.2em;
   font-weight: 700;
   color: var(--main-color);
   text-align: center;

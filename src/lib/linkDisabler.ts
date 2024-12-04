@@ -1,4 +1,4 @@
-import { accessBlackList } from "@/constants/navigationConstants";
+import { accessBlackList } from "@/constants/navigation";
 import { checkGuestAccess } from "./pageAccessChecker";
 
 export const disableLink = (link: string, isAuthenticated: boolean) => {

@@ -6,7 +6,7 @@ import RecipeCard from "./RecipeCard.vue";
 import { IRecipesFiltersParams } from "@/interfaces/recipe.js";
 import TextInput from "./ui/TextInput.vue";
 import { useUsersStore } from "@/stores/users.js";
-import { categoriesList, defaultFilters } from "@/constants/appConstants.js";
+import { categoriesList, defaultFilters } from "@/constants/app.js";
 import SelectInput from "./ui/SelectInput.vue";
 import { errorHandler } from "@/lib/errors/errorHandler.js";
 import MdiIcon from "./MdiIcon.vue";
@@ -154,7 +154,9 @@ const mobileFilterUpdate = () => {
       <TextInput type="text" v-model="filters.name" placeholder="Name" />
     </div>
     <div class="filter-inputs">
-      <p><MdiIcon :icon="mdiMagnify" :size="16" color="#1c3d5a" />Ingredients</p>
+      <p>
+        <MdiIcon :icon="mdiMagnify" :size="16" color="#1c3d5a" />Ingredients
+      </p>
       <TextInput
         type="text"
         v-model="filters.ingredients"
@@ -170,7 +172,9 @@ const mobileFilterUpdate = () => {
       />
     </div>
     <div class="filter-inputs">
-      <p><MdiIcon :icon="mdiMagnify" :size="16" color="#1c3d5a" />Instructions</p>
+      <p>
+        <MdiIcon :icon="mdiMagnify" :size="16" color="#1c3d5a" />Instructions
+      </p>
       <TextInput
         type="text"
         v-model="filters.instructions"
@@ -204,7 +208,6 @@ const mobileFilterUpdate = () => {
 </template>
 
 <style scoped>
-
 h2 {
   font-weight: 600;
   position: absolute;
@@ -269,7 +272,7 @@ p {
   .recipes-list-wrapper {
     width: 100%;
   }
-  .filters.mobile{
+  .filters.mobile {
     display: flex;
     position: fixed;
     top: var(--header-height);
