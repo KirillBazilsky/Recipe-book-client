@@ -23,24 +23,34 @@ const handleClose = () => {
 </script>
 
 <template>
-  <div class="user-message" :class="{ error: isError }" v-if="message?.value">
-    <MdiIcon
-      :icon="mdiClose"
-      :size="24"
-      color="#f3f0f0"
-      class="close-button"
-      @click="handleClose"
-    />
-    <MdiIcon
-      :icon="isError ? mdiAlert : mdiInformation"
-      color="#f3f0f0"
-      :size="48"
-    />
-    {{ message?.value }}
+  <div class="user-message-bg" v-if="message?.value" @click="handleClose" >
+    <div class="user-message" :class="{ error: isError }" v-if="message?.value">
+      <MdiIcon
+        :icon="mdiClose"
+        :size="24"
+        color="#f3f0f0"
+        class="close-button"
+        @click="handleClose"
+      />
+      <MdiIcon
+        :icon="isError ? mdiAlert : mdiInformation"
+        color="#f3f0f0"
+        :size="48"
+      />
+      {{ message?.value }}
+    </div>
   </div>
 </template>
 
 <style lang="css" scoped>
+.user-message-bg {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 10;
+}
 .user-message {
   position: fixed;
   top: 30%;

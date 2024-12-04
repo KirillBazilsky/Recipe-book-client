@@ -48,6 +48,7 @@ const handleLogout = (timeout: number) => {
 
   usersStore.setMessage(LOGOUT);
 };
+
 </script>
 
 <template>
@@ -107,7 +108,7 @@ const handleLogout = (timeout: number) => {
     </button>
   </nav>
   <div class="modal-blur mobile" v-if="isMobileMenuOpen"></div>
-  <router-view @click="usersStore.setMessage()"> </router-view>
+  <router-view> </router-view>
 </template>
 
 <style scoped lang="css">

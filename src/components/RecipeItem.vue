@@ -50,7 +50,7 @@ const deleteRecipe = async () => {
     if (props.recipe && props.recipe._id) {
       await recipeStore.deleteRecipe(props.recipe._id);
 
-      redirectCountDown(RECIPE_DELETED, 5, usersStore.setMessage).then(() =>
+      redirectCountDown(RECIPE_DELETED, 3, usersStore.setMessage).then(() =>
         router.push("/recipes")
       );
     }
