@@ -13,7 +13,7 @@ import {
   IUserCredentials,
 } from "../interfaces/user";
 import { checkAuthState } from "@/lib/authStateChecker.js";
-import { sessionExpireTime } from "@/constants/appConstants.js";
+import { sessionExpireTime } from "@/constants/app.js";
 import { messageType } from "@/interfaces/common";
 import { IFavoritesParams } from "@/interfaces/favorites";
 import {
@@ -22,7 +22,7 @@ import {
   removeFavoriteRequest,
 } from "@/api/favorites";
 import { IRecipe } from "@/interfaces/recipe";
-import { ProfileTabs } from "@/constants/navigationConstants";
+import { ProfileTabs } from "@/constants/navigation";
 import { NO_FAVORITES } from "@/constants/messages/errors";
 
 export const useUsersStore = defineStore("user", {
@@ -126,22 +126,15 @@ export const useUsersStore = defineStore("user", {
       payload: AxiosRequestConfig<IFavoritesParams>,
       recipe: IRecipe
     ) {
-      const response: AxiosResponse = await addFavoriteRequest(
-        payload
-      );
+      const response: AxiosResponse = await addFavoriteRequest(payload);
 
       this.favorites = [...(this.favorites ?? []), recipe];
-
 
       return response;
     },
 
-    async removeFavorite(
-      payload: AxiosRequestConfig<{ recipeId: string }>
-    ) {
-      const response: AxiosResponse = await removeFavoriteRequest(
-        payload
-      );
+    async removeFavorite(payload: AxiosRequestConfig<{ recipeId: string }>) {
+      const response: AxiosResponse = await removeFavoriteRequest(payload);
 
       this.favorites =
         this.favorites?.filter(
@@ -156,11 +149,10 @@ export const useUsersStore = defineStore("user", {
         const response: IRecipe[] = await getUserFavoritesRequest(userId);
         this.favorites = response;
 
-        if(!response.length) {
+        if (!response.length) {
           this.favorites = [];
           throw new Error(NO_FAVORITES);
-        };
-
+        }
       } catch (error) {
         throw error;
       }

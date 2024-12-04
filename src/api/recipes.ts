@@ -1,6 +1,6 @@
 import { AxiosRequestConfig, AxiosResponse } from "axios";
 import { IRecipe, IRecipesFiltersParams } from "../interfaces/recipe";
-import { BASE_URL } from "../constants/apiConstants.js";
+import { BASE_URL } from "../constants/api.js";
 import { api } from "./api";
 
 export const getRecipesRequest = async (params: IRecipesFiltersParams) => {

@@ -1,6 +1,6 @@
 import { AxiosRequestConfig, AxiosResponse } from "axios";
 import { IUser, IUserResponse, IUserCredentials } from "@/interfaces/user";
-import { BASE_URL } from "@/constants/apiConstants.js";
+import { BASE_URL } from "@/constants/api.js";
 import { api } from "./api";
 
 export const registerRequest = async (params: AxiosRequestConfig<IUser>) => {

@@ -5,8 +5,8 @@ import { iconRandomizer } from "@/lib/iconRandomizer.js";
 import { computed, onMounted, ref } from "vue";
 import { useUsersStore } from "@/stores/users.js";
 import { disableLink } from "@/lib/linkDisabler.js";
-import { foodIconList } from "@/constants/iconConstants.js";
-import { navigationList } from "@/constants/navigationConstants.js";
+import { foodIconList } from "@/constants/icon.js";
+import { navigationList } from "@/constants/navigation.js";
 import { useRecipeStore } from "@/stores/recipes.js";
 import router from "@/router";
 import { LOGOUT } from "@/constants/messages/users";
@@ -38,13 +38,13 @@ const toggleMobileMenu = () => {
 const handleLogout = (timeout: number) => {
   usersStore.logout();
 
-  if(!checkGuestAccess()) {
+  if (!checkGuestAccess()) {
     redirectCountDown(LOGOUT, timeout, usersStore.setMessage).then(() => {
-      router.replace("/recipes")
+      router.replace("/recipes");
     });
 
     return;
-  };
+  }
 
   usersStore.setMessage(LOGOUT);
 };
@@ -58,22 +58,15 @@ const handleLogout = (timeout: number) => {
       :key="`nav-${link.label}`"
       class="nav-link"
       :class="{ disabled: disableLink(link.route, isAuthenticated) }"
-      ><MdiIcon
-        :icon="randomizer()"
-        :size="32"
-        color="#fff"
-      />{{ link.label }}
-      </router-link>
-      <MdiIcon
-        :icon="randomizer()"
-        :size="32"
-        color="#fff"
-      />
+      ><MdiIcon :icon="randomizer()" :size="32" color="#fff" />{{ link.label }}
+    </router-link>
+    <MdiIcon :icon="randomizer()" :size="32" color="#fff" />
     <button
       class="nav-button"
       @click="handleLogout(3)"
       :class="{ disabled: !isAuthenticated }"
-    >Logout
+    >
+      Logout
     </button>
   </nav>
   <div class="nav-wrapper mobile">

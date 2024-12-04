@@ -8,7 +8,7 @@ import { errorHandler } from "@/lib/errors/errorHandler";
 import PasswordInput from "./ui/PasswordInput.vue";
 import TextInput from "./ui/TextInput.vue";
 import { watch } from "vue";
-import { blankUser } from "@/constants/appConstants";
+import { blankUser } from "@/constants/app";
 import { mdiRename } from "@mdi/js";
 import MdiIcon from "./MdiIcon.vue";
 import { NEED_LOGIN, EDIT_ACCOUNT } from "@/constants/messages/users";

@@ -1,6 +1,6 @@
 import { AxiosRequestConfig, AxiosResponse } from "axios";
 import { api } from "./api";
-import { BASE_URL } from "@/constants/apiConstants";
+import { BASE_URL } from "@/constants/api";
 import { IFavoritesParams } from "@/interfaces/favorites";
 import { IRecipe } from "@/interfaces/recipe";
 
@@ -16,7 +16,7 @@ export const addFavoriteRequest = async (
 };
 
 export const removeFavoriteRequest = async (
-  params: AxiosRequestConfig<{ recipeId: string }> 
+  params: AxiosRequestConfig<{ recipeId: string }>
 ) => {
   const response: AxiosResponse = await api.delete(
     `${BASE_URL}/favorites/`,

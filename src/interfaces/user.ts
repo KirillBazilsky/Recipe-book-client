@@ -1,4 +1,4 @@
-import { ProfileTabs } from "@/constants/navigationConstants";
+import { ProfileTabs } from "@/constants/navigation";
 import { IMessage } from "./common";
 import { IRecipe } from "./recipe";
 
@@ -7,7 +7,7 @@ export interface IUser {
   email: string;
   password: string;
   id: string | null;
-  favoritesId?: string
+  favoritesId?: string;
 }
 
 export interface IUserResponse {
@@ -20,17 +20,17 @@ export interface IUserState {
   isAuthenticated: boolean;
   message: IMessage | undefined;
   favorites: IRecipe[] | null;
-  currentProfileTab: ProfileTabs
+  currentProfileTab: ProfileTabs;
 }
 
 export interface IUserCredentials {
   email: string;
-  password: string
-};
+  password: string;
+}
 
 export enum Autocomplete {
-  newPassword = 'new-password',
-  currentPassword = 'currentPassword',
-  off="off",
-  email="email"
+  newPassword = "new-password",
+  currentPassword = "currentPassword",
+  off = "off",
+  email = "email",
 }

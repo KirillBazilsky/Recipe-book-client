@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { categoriesList } from "@/constants/appConstants.js";
+import { categoriesList } from "@/constants/app.js";
 import { filterSuggestions } from "@/lib/filterSuggestions.js";
 import { ref, watch } from "vue";
 
@@ -11,12 +11,15 @@ interface IProps {
 
 const props = defineProps<IProps>();
 const emit = defineEmits(["update:modelValue"]);
-const inputValue = ref<string>('');
+const inputValue = ref<string>("");
 
 const isDropdownOpen = ref<boolean>(false);
-const filteredOptions  = ref<string[]>(props.options);
+const filteredOptions = ref<string[]>(props.options);
 
-watch(() => props.modelValue, () => inputValue.value = props.modelValue);
+watch(
+  () => props.modelValue,
+  () => (inputValue.value = props.modelValue)
+);
 
 const handleClick = () => {
   isDropdownOpen.value = !isDropdownOpen.value;
@@ -27,10 +30,10 @@ const handleInput = (event: Event) => {
 
   if (target) {
     emit("update:modelValue", target.value);
-    inputValue.value = target.value
+    inputValue.value = target.value;
   }
 
-  filteredOptions.value = filterSuggestions(target.value, props.options)
+  filteredOptions.value = filterSuggestions(target.value, props.options);
 };
 
 const handleSelect = (value: string) => {
@@ -50,10 +53,13 @@ const handleSelect = (value: string) => {
       :placeholder="props.placeholder"
     />
     <ul class="dropdown" v-if="isDropdownOpen">
-        <li class="option" @click="handleSelect('')">
-            Unset
-        </li>
-      <li v-for="option in filteredOptions" @click="handleSelect(option)" :key="option" class="option">
+      <li class="option" @click="handleSelect('')">Unset</li>
+      <li
+        v-for="option in filteredOptions"
+        @click="handleSelect(option)"
+        :key="option"
+        class="option"
+      >
         {{ option }}
       </li>
     </ul>
@@ -83,6 +89,6 @@ const handleSelect = (value: string) => {
 }
 
 .option:hover {
-    background-color: #f0f0f0;
+  background-color: #f0f0f0;
 }
 </style>

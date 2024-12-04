@@ -7,8 +7,12 @@ import { errorHandler } from "@/lib/errors/errorHandler.js";
 import { credentialsValidator } from "@/lib/credentialValidators.js";
 import PasswordInput from "./ui/PasswordInput.vue";
 import TextInput from "./ui/TextInput.vue";
-import { blankName } from "@/constants/appConstants.js";
-import { ENTER_CREDENTIALS, GREETINGS, LOGOUT } from "@/constants/messages/users";
+import { blankName } from "@/constants/app.js";
+import {
+  ENTER_CREDENTIALS,
+  GREETINGS,
+  LOGOUT,
+} from "@/constants/messages/users";
 import UserMessage from "./ui/UserMessage.vue";
 import router from "@/router";
 import { redirectCountDown } from "@/lib/redirectCountdown";
@@ -33,7 +37,7 @@ const onSubmit = async () => {
         params.value.email,
         params.value.password
       ),
-      'error'
+      "error"
     );
 
     return;
@@ -42,10 +46,13 @@ const onSubmit = async () => {
   try {
     const response = await usersStore.login(config);
 
-    redirectCountDown(`${response.data.message}, welcome ${response.data.user.name}!`, 3, usersStore.setMessage).then(() => {
+    redirectCountDown(
+      `${response.data.message}, welcome ${response.data.user.name}!`,
+      3,
+      usersStore.setMessage
+    ).then(() => {
       router.replace("/profile");
-    })
-
+    });
   } catch (error: unknown) {
     usersStore.setMessage(errorHandler(error), "error");
   }
@@ -55,7 +62,6 @@ const handleLogout = () => {
   usersStore.logout();
   usersStore.setMessage(LOGOUT);
 };
-
 </script>
 
 <template>
