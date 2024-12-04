@@ -47,7 +47,7 @@ const onSubmit = async () => {
     const response = await usersStore.login(config);
 
     redirectCountDown(
-      `${response.data.message}, welcome ${response.data.user.name}!`,
+      `Welcome ${response.data.user.name}!`,
       3,
       usersStore.setMessage
     ).then(() => {

@@ -39,7 +39,7 @@ watch([() => favorites.value, () => props.recipe?._id], () => {
 const handleAddFavorite = async () => {
   if (!isAuth.value) {
     usersStore.setMessage(LOGIN_TO_FAVORITE);
-
+    console.log(usersStore.getMessage)
     return;
   }
 
