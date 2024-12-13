@@ -33,14 +33,6 @@ onMounted(() => {
   }
 });
 
-watch(() => currentUser.value, () => {
-  if (currentUser.value) {
-    params.value = currentUser.value;
-    userId.value = currentUser.value.id ?? "";
-    params.value.password = "";
-  }
-})
-
 const onSubmit = async () => {
   usersStore.setMessage();
 
