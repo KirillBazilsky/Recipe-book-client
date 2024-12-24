@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { categoriesList } from "@/constants/app.js";
 import { filterSuggestions } from "@/lib/filterSuggestions.js";
 import { ref, watch } from "vue";
+import MdiIcon from "../MdiIcon.vue";
+import { mdiArrowDownBold, mdiClose } from "@mdi/js";
 
 interface IProps {
   modelValue: string;
@@ -52,6 +53,7 @@ const handleSelect = (value: string) => {
       class="input"
       :placeholder="props.placeholder"
     />
+    <MdiIcon :icon="isDropdownOpen ? mdiClose : mdiArrowDownBold" :size=16 color="#1c3d5a" class="dropdown-icon" @click.prevent="handleClick"/>
     <ul class="dropdown" v-if="isDropdownOpen">
       <li class="option" @click="handleSelect('')">Unset</li>
       <li
@@ -67,6 +69,9 @@ const handleSelect = (value: string) => {
 </template>
 
 <style scoped lang="css">
+.input-wrapper {
+  position: relative;
+}
 .dropdown {
   position: absolute;
   top: 100%;
@@ -90,5 +95,13 @@ const handleSelect = (value: string) => {
 
 .option:hover {
   background-color: #f0f0f0;
+}
+
+.dropdown-icon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 5;
+  cursor: pointer;
 }
 </style>

@@ -8,7 +8,7 @@ import { errorHandler } from "@/lib/errors/errorHandler";
 import PasswordInput from "./ui/PasswordInput.vue";
 import TextInput from "./ui/TextInput.vue";
 import { watch } from "vue";
-import { blankUser } from "@/constants/app";
+import { blankUser } from "@/constants/common";
 import { mdiRename } from "@mdi/js";
 import MdiIcon from "./MdiIcon.vue";
 import { NEED_LOGIN, EDIT_ACCOUNT } from "@/constants/messages/users";
@@ -32,6 +32,17 @@ onMounted(() => {
     params.value.password = "";
   }
 });
+
+watch(
+  () => currentUser.value,
+  () => {
+    if (currentUser.value) {
+      params.value = currentUser.value;
+      userId.value = currentUser.value.id ?? "";
+      params.value.password = "";
+    }
+  }
+);
 
 const onSubmit = async () => {
   usersStore.setMessage();

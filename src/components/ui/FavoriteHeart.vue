@@ -108,23 +108,6 @@ const handleDeleteFromFavorites = async () => {
   cursor: pointer;
 }
 
-.tooltip {
-  position: absolute;
-  top: 0;
-  left: -200%;
-  transform: translateX(-50%);
-  padding: 5px 10px;
-  background-color: var(--secondary-color);
-  color: #fff;
-  font-size: 12px;
-  border-radius: 4px;
-  white-space: nowrap;
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.2s, visibility 0.2s;
-  z-index: 10;
-}
-
 .favorites-wrapper:hover .tooltip {
   visibility: visible;
   opacity: 1;

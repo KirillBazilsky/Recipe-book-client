@@ -10,12 +10,14 @@ export interface IRecipe {
   category: string;
   creator: { name: string; id: string };
   _id?: string;
+  image?: File;
 }
 
 export interface IRecipesState {
   currentRecipe: IRecipe | undefined;
   recipes: IRecipe[];
   isFiltersOpen: boolean;
+  count: number;
 }
 
 export interface IRecipesFiltersParams {
@@ -26,4 +28,6 @@ export interface IRecipesFiltersParams {
   creator: string;
   userId?: string;
   id?: string;
+  limit?: string;
+  page?: string
 }

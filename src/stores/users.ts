@@ -12,8 +12,8 @@ import {
   IUserResponse,
   IUserCredentials,
 } from "../interfaces/user";
-import { checkAuthState } from "@/lib/authStateChecker.js";
-import { sessionExpireTime } from "@/constants/app.js";
+import { checkAuthState } from "@/lib/authStateChecker";
+import { sessionExpireTime } from "@/constants/common";
 import { messageType } from "@/interfaces/common";
 import { IFavoritesParams } from "@/interfaces/favorites";
 import {
