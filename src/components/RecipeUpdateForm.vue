@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import {
-  categoriesList,
-  defaultIngredient,
-  defaultRecipe,
-} from "@/constants/app";
+import { categoriesList, defaultIngredient, defaultRecipe } from "@/constants/common";
 import { IRecipe } from "@/interfaces/recipe";
 import { useRecipeStore } from "@/stores/recipes";
 import { useUsersStore } from "@/stores/users";
@@ -11,7 +7,7 @@ import { AxiosRequestConfig } from "axios";
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import TextInput from "./ui/TextInput.vue";
-import { mdiDelete, mdiPlus, mdiRename } from "@mdi/js";
+import { mdiDelete, mdiFileImage, mdiPlus, mdiRename } from "@mdi/js";
 import Loader from "./Loader.vue";
 import MdiIcon from "./MdiIcon.vue";
 import SelectInput from "./ui/SelectInput.vue";
@@ -19,6 +15,7 @@ import { validateRecipe } from "@/lib/recipeValidator";
 import { errorHandler } from "@/lib/errors/errorHandler";
 import { NEED_LOGIN, RECIPE_UPDATED } from "@/constants/messages/users";
 import UserMessage from "./ui/UserMessage.vue";
+import ImageInput from "./ui/ImageInput.vue";
 
 const usersStore = useUsersStore();
 const recipesStore = useRecipeStore();
@@ -66,11 +63,20 @@ const onSubmit = async () => {
     return;
   }
 
-  try {
-    const payload: AxiosRequestConfig = {
-      data: recipe.value,
-    };
+  const recipeData = new FormData();
 
+  recipeData.append("name", recipe.value.name);
+  recipeData.append("category", recipe.value.category);
+  recipeData.append("ingredients", JSON.stringify(recipe.value.ingredients));
+  recipeData.append("instructions", recipe.value.instructions);
+
+  if (recipe.value.image) {
+    recipeData.append("image", recipe.value.image);
+  }
+
+  try {
+    const payload: FormData = recipeData;
+  
     await recipesStore.updateRecipe(paramsId, payload);
     usersStore.setMessage(RECIPE_UPDATED);
   } catch (error) {
@@ -170,6 +176,24 @@ const deleteIngredient = (number: number) => {
         <MdiIcon :icon="mdiRename" :size="16" color="#1c3d5a" />Instructions
       </p>
       <textarea class="input" v-model="recipe.instructions"></textarea>
+    </div>
+     <div class="input-wrapper recipe-form image">
+      <p class="recipe-form">
+        <MdiIcon :icon="mdiRename" :size="16" color="#1c3d5a" />Image
+      </p>
+      <ImageInput v-model="recipe.image" />
+      <div>
+        <h3>File for upload:</h3>
+        <div v-if="recipe.image">
+          <p>Name: {{ recipe.image?.name }}</p>
+          <p>Type: {{ recipe.image?.type }}</p>
+          <p>Size:{{ recipe.image?.size }} Kb</p>
+        </div>
+        <div v-else>
+          <p>No file</p>
+          <MdiIcon :icon="mdiFileImage" color="#1c3d5a" :size="24" />
+        </div>
+      </div>
     </div>
     <div class="input-wrapper recipe-form author">
       <p class="recipe-form">Author name</p>

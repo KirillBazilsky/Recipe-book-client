@@ -18,14 +18,21 @@ export const useRecipeStore = defineStore("recipes", {
     currentRecipe: undefined,
     recipes: [],
     isFiltersOpen: false,
+    count: 0,
   }),
   actions: {
     async fetchRecipes(payload: IRecipesFiltersParams) {
       try {
-        const response: IRecipe[] = await getRecipesRequest(payload);
-        this.recipes = response;
+        const response: { recipes: IRecipe[]; count: number } =
+          await getRecipesRequest(payload);
+        const { recipes, count } = response;
+
+        this.recipes = recipes;
+        this.count = count;
+
       } catch (error) {
         this.recipes = [];
+        this.count = 0;
         throw error;
       }
     },
@@ -39,16 +46,14 @@ export const useRecipeStore = defineStore("recipes", {
       }
     },
 
-    async addRecipe(payload: AxiosRequestConfig<IRecipe>) {
+    async addRecipe(payload: FormData) {
       const response = await addRecipeRequest(payload);
       this.recipes.push(response);
     },
 
-    async updateRecipe(recipeId: string, payload: AxiosRequestConfig<IRecipe>) {
+    async updateRecipe(recipeId: string, payload: FormData) {
       const response = await updateRecipeRequest(recipeId, payload);
-      const index = this.recipes.findIndex(
-        (recipe) => recipe._id === payload.data?._id
-      );
+      const index = this.recipes.findIndex((recipe) => recipe._id === recipeId);
 
       if (index !== -1) this.recipes.splice(index, 1, response);
     },
@@ -64,5 +69,6 @@ export const useRecipeStore = defineStore("recipes", {
     allRecipes: (state) => state.recipes,
     getCurrentRecipe: (state) => state.currentRecipe,
     getIsFiltersOpen: (state) => state.isFiltersOpen,
+    getCount: (state) => state.count,
   },
 });
