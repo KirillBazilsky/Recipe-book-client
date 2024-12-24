@@ -3,14 +3,14 @@ import {
   categoriesList,
   defaultIngredient,
   defaultRecipe,
-} from "@/constants/app";
+} from "@/constants/common";
 import { IRecipe } from "@/interfaces/recipe";
 import { useRecipeStore } from "@/stores/recipes";
 import { useUsersStore } from "@/stores/users";
 import { AxiosRequestConfig } from "axios";
 import { computed, onMounted, ref, watch } from "vue";
 import TextInput from "./ui/TextInput.vue";
-import { mdiDelete, mdiPlus, mdiRename } from "@mdi/js";
+import { mdiDelete, mdiFileImage, mdiPlus, mdiRename } from "@mdi/js";
 import Loader from "./Loader.vue";
 import MdiIcon from "./MdiIcon.vue";
 import SelectInput from "./ui/SelectInput.vue";
@@ -18,6 +18,7 @@ import { validateRecipe } from "@/lib/recipeValidator";
 import { errorHandler } from "@/lib/errors/errorHandler";
 import { NEED_LOGIN, RECIPE_ADDED } from "@/constants/messages/users";
 import UserMessage from "./ui/UserMessage.vue";
+import ImageInput from "./ui/ImageInput.vue";
 
 const usersStore = useUsersStore();
 const recipesStore = useRecipeStore();
@@ -63,22 +64,29 @@ const onSubmit = async () => {
   isLoading.value = true;
 
   if (!recipe.value) {
+    isLoading.value = false;
     return;
   }
 
-  if (validateRecipe(recipe.value)) {
-    usersStore.setMessage(validateRecipe(recipe.value), "error");
+  const validationError = validateRecipe(recipe.value);
+  if (validationError) {
+    usersStore.setMessage(validationError, "error");
     isLoading.value = false;
-
     return;
+  }
+
+  const recipeData = new FormData();
+  recipeData.append("name", recipe.value.name);
+  recipeData.append("category", recipe.value.category);
+  recipeData.append("ingredients", JSON.stringify(recipe.value.ingredients));
+  recipeData.append("instructions", recipe.value.instructions);
+
+  if (recipe.value.image) {
+    recipeData.append("image", recipe.value.image);
   }
 
   try {
-    const config: AxiosRequestConfig = {
-      data: recipe.value,
-    };
-
-    await recipesStore.addRecipe(config);
+    await recipesStore.addRecipe(recipeData);
     usersStore.setMessage(RECIPE_ADDED);
     isRecipeAdded.value = true;
   } catch (error) {
@@ -87,6 +95,7 @@ const onSubmit = async () => {
     isLoading.value = false;
   }
 };
+
 
 const addIngredient = () => {
   recipe.value.ingredients.push({ ...defaultIngredient });
@@ -193,6 +202,24 @@ const addOtherRecipe = () => {
         <MdiIcon :icon="mdiRename" :size="16" color="#1c3d5a" />Instructions
       </p>
       <textarea class="input" v-model="recipe.instructions"></textarea>
+    </div>
+    <div class="input-wrapper recipe-form image">
+      <p class="recipe-form">
+        <MdiIcon :icon="mdiRename" :size="16" color="#1c3d5a" />Image
+      </p>
+      <ImageInput v-model="recipe.image" />
+      <div>
+        <h3>File for upload:</h3>
+        <div v-if="recipe.image">
+          <p>Name: {{ recipe.image?.name }}</p>
+          <p>Type: {{ recipe.image?.type }}</p>
+          <p>Size:{{ recipe.image?.size }} Kb</p>
+        </div>
+        <div v-else>
+          <p>No file</p>
+          <MdiIcon :icon="mdiFileImage" color="#1c3d5a" :size="24" />
+        </div>
+      </div>
     </div>
     <div class="input-wrapper recipe-form author">
       <p class="recipe-form">Author name</p>

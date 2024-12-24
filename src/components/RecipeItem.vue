@@ -13,6 +13,7 @@ import router from "@/router";
 import { RECIPE_DELETED } from "@/constants/messages/users";
 import { checkFavorites } from "@/lib/FavoritesChecker";
 import FavoriteHeart from "./ui/FavoriteHeart.vue";
+import { BASE_IMG_URL, BASE_URL } from "@/constants/api";
 
 interface IProps {
   recipe: IRecipe | undefined;
@@ -74,7 +75,15 @@ const goToRecipe = (id: string | undefined) => {
       :size="96"
       color="#1c3d5a"
       class="icon"
+      v-if="!props.recipe?.image"
     />
+    <div class="recipe-image-wrapper" v-else>
+      <img
+        :src="`${BASE_IMG_URL}${props.recipe?.image}`"
+        class="recipe-img"
+        alt="recipe-image"
+      />
+    </div>
     <div class="label-wrapper">
       <h1>{{ props.recipe?.name }}</h1>
     </div>
@@ -202,6 +211,17 @@ tbody tr:last-of-type td {
 
 .tab-button-wrapper {
   width: auto;
+}
+
+.recipe-image-wrapper {
+  padding: 24px;
+  display: block;
+  overflow: hidden;
+  width: 100%;
+}
+
+.recipe-img {
+  width: 100%;
 }
 
 @media (max-width: 768px) {
