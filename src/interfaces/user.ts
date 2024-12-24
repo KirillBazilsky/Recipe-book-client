@@ -33,4 +33,5 @@ export enum Autocomplete {
   currentPassword = "currentPassword",
   off = "off",
   email = "email",
+  file = "file"
 }

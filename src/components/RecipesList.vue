@@ -6,7 +6,7 @@ import RecipeCard from "./RecipeCard.vue";
 import { IRecipesFiltersParams } from "@/interfaces/recipe.js";
 import TextInput from "./ui/TextInput.vue";
 import { useUsersStore } from "@/stores/users.js";
-import { categoriesList, defaultFilters } from "@/constants/app.js";
+import { categoriesList, defaultFilters } from "@/constants/common.js";
 import SelectInput from "./ui/SelectInput.vue";
 import { errorHandler } from "@/lib/errors/errorHandler.js";
 import MdiIcon from "./MdiIcon.vue";
@@ -14,6 +14,8 @@ import { mdiMagnify } from "@mdi/js";
 import router from "@/router";
 import Loader from "./Loader.vue";
 import UserMessage from "./ui/UserMessage.vue";
+import Pagination from "./Pagination.vue";
+import { watch } from "vue";
 
 interface IProps {
   userId?: string;
@@ -29,6 +31,10 @@ const isFiltersOpen = computed(() => recipeStore.getIsFiltersOpen);
 
 const filters = ref<IRecipesFiltersParams>({ ...defaultFilters });
 const isLoading = ref<boolean>(false);
+
+watch([() => filters.value.limit, () => filters.value.page], () => {
+  getRecipes(filters.value);
+});
 
 const toggleFilters = () => {
   recipeStore.isFiltersOpen = false;
@@ -195,6 +201,10 @@ const mobileFilterUpdate = () => {
     </div>
   </form>
   <UserMessage />
+  <Pagination
+    v-model:model-limit-value="filters.limit"
+    v-model:model-page-value="filters.page"
+  />
   <div class="recipes-list-wrapper" v-if="!isLoading">
     <RecipeCard
       v-for="recipe in recipes"
@@ -226,7 +236,7 @@ h2 {
   flex-direction: row;
   justify-content: center;
   align-items: flex-start;
-  z-index: 5;
+  z-index: 10;
 }
 
 .filter-inputs {

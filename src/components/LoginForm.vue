@@ -4,10 +4,10 @@ import { AxiosRequestConfig } from "axios";
 import { useUsersStore } from "@/stores/users";
 import { Autocomplete, IUserCredentials } from "@/interfaces/user";
 import { errorHandler } from "@/lib/errors/errorHandler.js";
-import { credentialsValidator } from "@/lib/credentialValidators.js";
+import { credentialsValidator } from "@/lib/credentialValidators";
 import PasswordInput from "./ui/PasswordInput.vue";
 import TextInput from "./ui/TextInput.vue";
-import { blankName } from "@/constants/app.js";
+import { blankName } from "@/constants/common";
 import {
   ENTER_CREDENTIALS,
   GREETINGS,
